@@ -73,22 +73,24 @@ echo -e "${green}🔐 Layanan VPN Premium • Cepat • Mudah • Aman${neutral}
 echo -e "${blue}🤖 Powered by RISWAN - Bot Telegram Modifikasi${neutral}"
 echo -e "${orange}────────────────────────────────────────────${neutral}"
 
-    read -p "Masukkan token bot: " token
-while [ -z "$token" ]; do read -p "Masukkan token bot: " token; done
+read -p "Masukkan token bot: " token
+    while [ -z "$token" ]; do read -p "Masukkan token bot: " token; done
 
-read -p "Masukkan admin ID: " adminid
+    read -p "Masukkan admin ID: " adminid
     while [ -z "$adminid" ]; do read -p "Masukkan admin ID: " adminid; done
 
-read -p "Masukkan nama store: " namastore
-while [ -z "$namastore" ]; do read -p "Masukkan nama store: " namastore; done
-read -p "Masukkan DATA QRIS: " dataqris
-while [ -z "$dataqris" ]; do read -p "Masukkan DATA QRIS: " dataqris; done
+    read -p "Masukkan nama store: " namastore
+    while [ -z "$namastore" ]; do read -p "Masukkan nama store: " namastore; done
 
-read -p "Masukkan MERCHANT ID: " merchantid
-while [ -z "$merchantid" ]; do read -p "Masukkan MERCHANT ID: " merchantid; done
+    read -p "Masukkan DATA QRIS: " dataqris
+    while [ -z "$dataqris" ]; do read -p "Masukkan DATA QRIS: " dataqris; done
 
-read -p "Masukkan API KEY: " apikey
-while [ -z "$apikey" ]; do read -p "Masukkan API KEY: " apikey; done
+    read -p "Masukkan MERCHANT ID: " merchantid
+    while [ -z "$merchantid" ]; do read -p "Masukkan MERCHANT ID: " merchantid; done
+
+    read -p "Masukkan API KEY: " apikey
+    while [ -z "$apikey" ]; do read -p "Masukkan API KEY: " apikey; done
+        
 
     # Simpan konfigurasi ke file .vars.json
     cat >/root/BotVPN4/.vars.json <<EOF
