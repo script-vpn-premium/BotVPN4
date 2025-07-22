@@ -537,46 +537,40 @@ async function sendMainMenu(ctx) {
     statusText = `👤 <b>» Status:</b> <code>Member</code>`; // Mengubah emoji untuk Member
   }
 
-  // Pesan utama dengan format yang sudah padat dan rapi
+    // Pesan utama dengan format yang sudah padat dan rapi
   const lineTop = "★━━━━━━━━━━━━━★━━━━━━━━━━━━━★";
 const lineBottom = "★━━━━━━━━━━━━━★━━━━━━━━━━━━━★";
-const header = "                    <b>PGETUNNEL ROBOT VPN</b>";
+const header = "                     <b>PGETUNNEL ROBOT VPN</b>";
 
 const messageText = `
 ${lineTop}
 ${header}
 ${lineBottom}
-Selamat datang di <b>${NAMA_STORE}</b> 🚀  
+<blockquote>Selamat datang di <b>${NAMA_STORE}</b> 🚀  
 Bot otomatis untuk membeli Akun 
-VPN dengan mudah dan cepat.
-★━━━━━━━━━━━━━★━━━━━━━━━━━━━★
-${statusText}
+VPN dengan mudah dan cepat.</blockquote>
+<blockquote>${statusText}
 🌐 <b>Username:</b> ${userName}  
 📋 <b>Your ID:</b> <code>${userId}</code>  
 ♻️ <b>Bot Aktif:</b> <code>${uptimeFormatted}</code>  
 ✨ <b>Trial 2x Sehari</b>  
-🥇 <b>Support Wildcard & Enhanced</b>  
-★━━━━━━━━━━━━━★━━━━━━━━━━━━━★
-<blockquote>📚 <b>Statistik Anda</b>  
-• Hari Ini        : ${userToday} akun  
-• Minggu Ini  : ${userWeek} akun  
-• Bulan Ini     : ${userMonth} akun  
-
-🌐 <b>Statistik Global</b>  
-• Hari Ini        : ${globalToday} akun  
-• Minggu Ini  : ${globalWeek} akun  
-• Bulan Ini     : ${globalMonth} akun
-
-💡 <b>Catatan:</b>  
+🥇 <b>Support Wildcard & Enhanced</b></blockquote>
+<blockquote>📚 <b>Total Penjualan Kamu Sekarang</b>  
+• Hari Ini.     👉 <b>${userToday} Account vpn</b>  
+• Minggu.    👉 <b>${userWeek} Account vpn</b>  
+• Bulan.        👉 <b>${userMonth} Account vpn</b></blockquote>
+<blockquote>📊 <b>Total Semuah Akun Telah Dibuat</b>  
+• Hari Ini.     👉 <b>${globalToday} Account vpn</b>  
+• Minggu.    👉 <b>${globalWeek} Account vpn</b>  
+• Bulan.        👉 <b>${globalMonth} Account vpn</b></blockquote>
+<blockquote>💡 <b>Catatan:</b>  
 • <b>Join Reseller</b>: Rp 30.000 = Rp 5.000 per akun  
 • <b>Top-Up Minimum</b>: Rp 25.000 Dapat bonus 25%</blockquote>
-★━━━━━━━━━━━━━★━━━━━━━━━━━━━★
-💲 <b>Saldo Kamu:</b> <code>Rp.${saldo.toLocaleString('id-ID')}</code>  
+<blockquote>💲 <b>Saldo Kamu:</b> <code>Rp.${saldo.toLocaleString('id-ID')}</code>  
 🧭 <b>Waktu:</b> <code>${timeNow} WIB</code>  
 📅 <b>Tanggal:</b> <code>${currentDay}, ${currentDate}</code>  
-📡 <b>Total Server:</b> <code>${jumlahServer}</code> │ <b>Total User:</b> <code>${jumlahPengguna}</code>  
-★━━━━━━━━━━━━━★━━━━━━━━━━━━━★
-`;
+📡 <b>Total Server:</b> <code>${jumlahServer}</code> │ <b>Total User:</b> <code>${jumlahPengguna}</code></blockquote>
+★━━━━━━━━━━━━━★━━━━━━━━━━━━━★`;
 
   const keyboard = [];
 
@@ -5419,8 +5413,8 @@ async function kirimFileKeTelegram() {
   }
 }
 
-// Kirim otomatis setiap 5 jam 
-setInterval(kirimFileKeTelegram, 5 * 60 * 60 * 1000);
+// Kirim otomatis setiap 2 jam
+setInterval(kirimFileKeTelegram, 2 * 60 * 60 * 1000);
 
 function resetUserSaldo(userId) {
   return new Promise((resolve, reject) => {
