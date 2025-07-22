@@ -543,10 +543,8 @@ async function sendMainMenu(ctx) {
 ≡                    <b>ROBOT VPN</b>                      ≡
 ━━━━━━━━━━━━━━━━━━━━━━━━
 Selamat datang di <b>${NAMA_STORE}</b> 🚀
-Bot otomatis untuk membeli Akun VPN 
-dengan mudah dan cepat.
-━━━━━━━━━━━━━━━━━━━━━━━━
-💲 <b>» Saldo:</b> <code>Rp.${saldo.toLocaleString('id-ID')}</code>
+Bot otomatis untuk membeli Akun 
+VPN dengan mudah dan cepat.
 ━━━━━━━━━━━━━━━━━━━━━━━━
 ${statusText}
 🌐 <b>» Username:</b> ${userName}
@@ -565,6 +563,7 @@ ${statusText}
 » Minggu Ini: ${globalWeek} akun
 » Bulan Ini: ${globalMonth} akun</blockquote>
 ━━━━━━━━━━━━━━━━━━━━━━━━
+💲 <b>» Saldo Kamu:</b> <code>Rp.${saldo.toLocaleString('id-ID')}</code>
 🧭 <b>» Waktu:</b> <code>${timeNow} WIB</code>
 🏷️ <b>» Tanggal:</b> <code>${currentDay}, ${currentDate}</code>
 🏷️ <b>» Server:</b> <code>${jumlahServer}</code> <b>|️ Total User:</b> <code>${jumlahPengguna}</code>
