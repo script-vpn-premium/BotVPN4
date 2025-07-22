@@ -76,9 +76,11 @@ echo -e "${orange}────────────────────�
     read -p "Masukkan token bot: " token
 while [ -z "$token" ]; do read -p "Masukkan token bot: " token; done
 
+read -p "Masukkan admin ID: " adminid
+    while [ -z "$adminid" ]; do read -p "Masukkan admin ID: " adminid; done
+
 read -p "Masukkan nama store: " namastore
 while [ -z "$namastore" ]; do read -p "Masukkan nama store: " namastore; done
-
 read -p "Masukkan DATA QRIS: " dataqris
 while [ -z "$dataqris" ]; do read -p "Masukkan DATA QRIS: " dataqris; done
 
