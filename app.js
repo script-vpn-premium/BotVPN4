@@ -561,11 +561,14 @@ ${statusText}
 • Hari Ini        : ${userToday} akun  
 • Minggu Ini  : ${userWeek} akun  
 • Bulan Ini     : ${userMonth} akun  
-  
+
 🌐 <b>Statistik Global</b>  
 • Hari Ini        : ${globalToday} akun  
 • Minggu Ini  : ${globalWeek} akun  
-• Bulan Ini     : ${globalMonth} akun</blockquote>
+• Bulan Ini     : ${globalMonth} akun
+
+💡 <b>Catatan:</b>  
+• <b>Join Reseller</b>: Rp 30.000 = Rp 5.000 per akun</blockquote>
 ★━━━━━━━━━━━━━★━━━━━━━━━━━━━★
 💲 <b>Saldo Kamu:</b> <code>Rp.${saldo.toLocaleString('id-ID')}</code>  
 🧭 <b>Waktu:</b> <code>${timeNow} WIB</code>  
