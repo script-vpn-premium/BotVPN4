@@ -568,7 +568,8 @@ ${statusText}
 • Bulan Ini     : ${globalMonth} akun
 
 💡 <b>Catatan:</b>  
-• <b>Join Reseller</b>: Rp 30.000 = Rp 5.000 per akun</blockquote>
+• <b>Join Reseller</b>: Rp 30.000 = Rp 5.000 per akun  
+• <b>Top-Up Minimum</b>: Rp 25.000 Dapat bonus 25%</blockquote>
 ★━━━━━━━━━━━━━★━━━━━━━━━━━━━★
 💲 <b>Saldo Kamu:</b> <code>Rp.${saldo.toLocaleString('id-ID')}</code>  
 🧭 <b>Waktu:</b> <code>${timeNow} WIB</code>  
