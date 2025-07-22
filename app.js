@@ -540,7 +540,7 @@ async function sendMainMenu(ctx) {
   // Pesan utama dengan format yang sudah padat dan rapi
   const lineTop = "★━━━━━━━━━━━━━★━━━━━━━━━━━━━★";
 const lineBottom = "★━━━━━━━━━━━━━★━━━━━━━━━━━━━★";
-const header = "                     <b>PGETUNNEL ROBOT VPN</b>";
+const header = "                    <b>PGETUNNEL ROBOT VPN</b>";
 
 const messageText = `
 ${lineTop}
@@ -576,7 +576,7 @@ ${statusText}
 
   const keyboard = [];
 
-  if (bolehLihatTrial) {
+if (bolehLihatTrial) {
   keyboard.push([{ text: '🧪 Trial Akun', callback_data: 'service_trial' }]);
 }
 
@@ -587,7 +587,7 @@ keyboard.push([
 
 keyboard.push([
   { text: '💳 TopUp Saldo', callback_data: 'menu_topup' },
-  { text: '📦 Sewa Script', callback_data: 'service_sewascript' }
+  { text: '🤝 Join Reseller', url: 'https://t.me/JesVpnt' }
 ]);
 
 
