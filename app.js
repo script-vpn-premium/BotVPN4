@@ -538,40 +538,41 @@ async function sendMainMenu(ctx) {
   }
 
   // Pesan utama dengan format yang sudah padat dan rapi
-  const messageText = `
-━━━━━━━━━━━━━━━━━━━━━━━━
-≡                    <b>ROBOT VPN</b>                      ≡
-━━━━━━━━━━━━━━━━━━━━━━━━
-Selamat datang di <b>${NAMA_STORE}</b> 🚀
+  const lineTop = "★━━━━━━━━━━━━━★━━━━━━━━━━━━━★";
+const lineBottom = "★━━━━━━━━━━━━━★━━━━━━━━━━━━━★";
+const header = "                     <b>PGETUNNEL ROBOT VPN</b>";
+
+const messageText = `
+${lineTop}
+${header}
+${lineBottom}
+Selamat datang di <b>${NAMA_STORE}</b> 🚀  
 Bot otomatis untuk membeli Akun 
 VPN dengan mudah dan cepat.
-━━━━━━━━━━━━━━━━━━━━━━━━
+★━━━━━━━━━━━━━★━━━━━━━━━━━━━★
 ${statusText}
-🌐 <b>» Username:</b> ${userName}
-📋 <b>» Your ID:</b> <code>${userId}</code>
-♻️ <b>» Bot Aktif:</b> <code>${uptimeFormatted}</code>
-✨ <b>» Trial 2x Sehari</b>
-🥇 <b>» Support Wildcard & Enhanced</b>
-━━━━━━━━━━━━━━━━━━━━━━━━
-<blockquote>📚 <b>Statistik Anda</b>
-» Hari Ini: ${userToday} akun
-» Minggu Ini: ${userWeek} akun
-» Bulan Ini: ${userMonth} akun
-
-🌐 <b>Statistik Global</b>
-» Hari Ini: ${globalToday} akun
-» Minggu Ini: ${globalWeek} akun
-» Bulan Ini: ${globalMonth} akun</blockquote>
-━━━━━━━━━━━━━━━━━━━━━━━━
-💲 <b>» Saldo Kamu:</b> <code>Rp.${saldo.toLocaleString('id-ID')}</code>
-🧭 <b>» Waktu:</b> <code>${timeNow} WIB</code>
-🏷️ <b>» Tanggal:</b> <code>${currentDay}, ${currentDate}</code>
-🏷️ <b>» Server:</b> <code>${jumlahServer}</code> <b>|️ Total User:</b> <code>${jumlahPengguna}</code>
-🥇 <b>» Developer Bot:</b>
-🏷️ <b>» </b><a href="https://t.me/yha_bot">@yha_bot</a>, <a href="https://t.me/AutoFtBot69">@AutoFtBot69</a>
-🥈 <b>» Modifikasi Oleh:</b>
-🏷️ <b>» </b><a href="https://t.me/freenet_on">@freenet_on</a>, <a href="https://t.me/kytxz">@kytxz</a>, <a href="https://t.me/JesVpnt">@JesVpnt</a>
-━━━━━━━━━━━━━━━━━━━━━━━━`;
+🌐 <b>Username:</b> ${userName}  
+📋 <b>Your ID:</b> <code>${userId}</code>  
+♻️ <b>Bot Aktif:</b> <code>${uptimeFormatted}</code>  
+✨ <b>Trial 2x Sehari</b>  
+🥇 <b>Support Wildcard & Enhanced</b>  
+★━━━━━━━━━━━━━★━━━━━━━━━━━━━★
+<blockquote>📚 <b>Statistik Anda</b>  
+• Hari Ini        : ${userToday} akun  
+• Minggu Ini  : ${userWeek} akun  
+• Bulan Ini     : ${userMonth} akun  
+  
+🌐 <b>Statistik Global</b>  
+• Hari Ini        : ${globalToday} akun  
+• Minggu Ini  : ${globalWeek} akun  
+• Bulan Ini     : ${globalMonth} akun</blockquote>
+★━━━━━━━━━━━━━★━━━━━━━━━━━━━★
+💲 <b>Saldo Kamu:</b> <code>Rp.${saldo.toLocaleString('id-ID')}</code>  
+🧭 <b>Waktu:</b> <code>${timeNow} WIB</code>  
+📅 <b>Tanggal:</b> <code>${currentDay}, ${currentDate}</code>  
+📡 <b>Total Server:</b> <code>${jumlahServer}</code> │ <b>Total User:</b> <code>${jumlahPengguna}</code>  
+★━━━━━━━━━━━━━★━━━━━━━━━━━━━★
+`;
 
   const keyboard = [];
 
