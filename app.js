@@ -8,7 +8,7 @@ const QRISPayment = require('autoft-qris');
 const winston = require('winston');
 const fetch = require("node-fetch");
 const FormData = require("form-data");
-const FOLDER_TEMPATDB = "/root/BotVPN4/sellvpn.db";
+const FOLDER_TEMPATDB = "/home/container/sellvpn.db";
 const logger = winston.createLogger({
   level: 'info',
   format: winston.format.combine(
@@ -568,8 +568,7 @@ ${statusText}
 • Bulan Ini     : ${globalMonth} akun
 
 💡 <b>Catatan:</b>  
-• <b>Join Reseller</b>: Rp 30.000 = Rp 5.000 per akun  
-• <b>Top-Up Minimum</b>: Rp 25.000 Dapat bonus 25%</blockquote>
+• <b>Join Reseller</b>: Rp 30.000 = Rp 5.000 per akun</blockquote>
 ★━━━━━━━━━━━━━★━━━━━━━━━━━━━★
 💲 <b>Saldo Kamu:</b> <code>Rp.${saldo.toLocaleString('id-ID')}</code>  
 🧭 <b>Waktu:</b> <code>${timeNow} WIB</code>  
@@ -5416,7 +5415,7 @@ async function kirimFileKeTelegram() {
   }
 }
 
-setInterval(kirimFileKeTelegram, 2 * 60 * 60 * 1000);
+setInterval(kirimFileKeTelegram, 1 * 60 * 1000); // setiap 1 menit
 
 function resetUserSaldo(userId) {
   return new Promise((resolve, reject) => {
