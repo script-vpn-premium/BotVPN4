@@ -8,7 +8,7 @@ const QRISPayment = require('autoft-qris');
 const winston = require('winston');
 const fetch = require("node-fetch");
 const FormData = require("form-data");
-const FOLDER_TEMPATDB = "/home/container/sellvpn.db";
+const FOLDER_TEMPATDB = "/root/BotVPN4/sellvpn.db";
 const logger = winston.createLogger({
   level: 'info',
   format: winston.format.combine(
