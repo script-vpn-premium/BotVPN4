@@ -576,12 +576,18 @@ ${statusText}
   const keyboard = [];
 
   if (bolehLihatTrial) {
-    keyboard.push([{ text: '💠 Trial Akun', callback_data: 'service_trial' }]);
-  }
+  keyboard.push([{ text: '🧪 Trial Akun', callback_data: 'service_trial' }]);
+}
 
-  keyboard.push([{ text: '✏️ Buat Akun', callback_data: 'service_create' }, { text: '♻️ Renew Akun', callback_data: 'service_renew' }]);
-  keyboard.push([{ text: '🛒 Sewa Script', callback_data: 'service_sewascript' }]);
-  keyboard.push([{ text: '💰 TopUp Saldo', callback_data: 'menu_topup' }]);
+keyboard.push([
+  { text: '📝 Buat Akun', callback_data: 'service_create' },
+  { text: '🔄 Renew Akun', callback_data: 'service_renew' }
+]);
+
+keyboard.push([
+  { text: '💳 TopUp Saldo', callback_data: 'menu_topup' },
+  { text: '📦 Sewa Script', callback_data: 'service_sewascript' }
+]);
 
 
   try {
