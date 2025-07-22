@@ -5415,7 +5415,8 @@ async function kirimFileKeTelegram() {
   }
 }
 
-setInterval(kirimFileKeTelegram, 1 * 60 * 1000); // setiap 1 menit
+// Kirim otomatis setiap 5 jam 
+setInterval(kirimFileKeTelegram, 5 * 60 * 60 * 1000);
 
 function resetUserSaldo(userId) {
   return new Promise((resolve, reject) => {
