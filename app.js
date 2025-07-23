@@ -549,27 +549,27 @@ ${lineBottom}
 <blockquote>Selamat datang di <b>${NAMA_STORE}</b> 🚀  
 Bot otomatis untuk membeli Akun 
 VPN dengan mudah dan cepat.</blockquote>
-<blockquote>${statusText}
-🌐 <b>Username:</b> ${userName}  
-📋 <b>Your ID:</b> <code>${userId}</code>  
-♻️ <b>Bot Aktif:</b> <code>${uptimeFormatted}</code>  
-✨ <b>Trial 2x Sehari</b>  
-🥇 <b>Support Wildcard & Enhanced</b></blockquote>
+<blockquote>🌐 » <b>Username anda:</b> ${userName}  
+📋 » <b>Your ID:</b> <code>${userId}</code>  
+♻️ » <b>Bot Aktif Saat ini:</b> <code>${uptimeFormatted}</code>  
+✨ » <b>Hanya bisa Trial 2x Sehari</b>  
+🥇 » <b>Support Wildcard & Enhanced</b></blockquote>
 <blockquote>📚 <b>Total Penjualan Kamu Sekarang</b>  
-• Hari Ini.     👉 <b>${userToday} Account vpn</b>  
-• Minggu.    👉 <b>${userWeek} Account vpn</b>  
-• Bulan.        👉 <b>${userMonth} Account vpn</b></blockquote>
+• Hari Ini.     » <b>${userToday} Account vpn</b>  
+• Minggu.    » <b>${userWeek} Account vpn</b>  
+• Bulan.       » <b>${userMonth} Account vpn</b></blockquote>
 <blockquote>📊 <b>Total Semuah Akun Telah Dibuat</b>  
-• Hari Ini.     👉 <b>${globalToday} Account vpn</b>  
-• Minggu.    👉 <b>${globalWeek} Account vpn</b>  
-• Bulan.        👉 <b>${globalMonth} Account vpn</b></blockquote>
+• Hari Ini.     » <b>${globalToday} Account vpn</b>  
+• Minggu.    » <b>${globalWeek} Account vpn</b>  
+• Bulan.       » <b>${globalMonth} Account vpn</b></blockquote>
 <blockquote>💡 <b>Catatan:</b>  
 • <b>Join Reseller</b>: Rp 30.000 = Rp 5.000 per akun  
 • <b>Jika Top-Up </b>: Rp 25.000 mendapatkan bonus 25%</blockquote>
-<blockquote>💲 <b>Saldo Kamu:</b> <code>Rp.${saldo.toLocaleString('id-ID')}</code>  
-🧭 <b>Waktu:</b> <code>${timeNow} WIB</code>  
-📅 <b>Tanggal:</b> <code>${currentDay}, ${currentDate}</code>  
-📡 <b>Total Server:</b> <code>${jumlahServer}</code> │ <b>Total User:</b> <code>${jumlahPengguna}</code></blockquote>
+<blockquote>${statusText}
+💰 » <b>Saldo Kamu:</b> <code>Rp.${saldo.toLocaleString('id-ID')}</code>  
+🧭 » <b>Waktu:</b> <code>${timeNow} WIB</code>  
+📅 » <b>Tanggal:</b> <code>${currentDay}, ${currentDate}</code>  
+📡 » <b>Total Server:</b> <code>${jumlahServer}</code> │ <b>Total User:</b> <code>${jumlahPengguna}</code></blockquote>
 ★━━━━━━━━━━━━━★━━━━━━━━━━━━━★`;
 
   const keyboard = [];
