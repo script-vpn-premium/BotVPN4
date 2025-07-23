@@ -534,7 +534,7 @@ async function sendMainMenu(ctx) {
   } else if (userRole === 'reseller') {
     statusText = `🏆 <b>» Status kamu:</b> <code>Reseller</code>`;
   } else {
-    statusText = `👤 <b>» Status:</b> <code>Member</code>`; // Mengubah emoji untuk Member
+    statusText = `👤 <b>» Status kamu:</b> <code>Member</code>`; // Mengubah emoji untuk Member
   }
 
     // Pesan utama dengan format yang sudah padat dan rapi
