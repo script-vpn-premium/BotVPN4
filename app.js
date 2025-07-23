@@ -557,11 +557,11 @@ VPN dengan mudah dan cepat.</blockquote>
 <blockquote>📚 <b>Total Penjualan Kamu Sekarang</b>  
 • Hari Ini.     » <b>${userToday} Account vpn</b>  
 • Minggu.    » <b>${userWeek} Account vpn</b>  
-• Bulan.        » <b>${userMonth} Account vpn</b></blockquote>
+• Bulan.        »<b>${userMonth} Account vpn</b></blockquote>
 <blockquote>📊 <b>Total Semuah Akun Telah Dibuat</b>  
 • Hari Ini.     » <b>${globalToday} Account vpn</b>  
 • Minggu.    » <b>${globalWeek} Account vpn</b>  
-• Bulan.        » <b>${globalMonth} Account vpn</b></blockquote>
+• Bulan.        »<b>${globalMonth} Account vpn</b></blockquote>
 <blockquote>💡 <b>Catatan:</b>  
 • <b>Join Reseller</b>: Rp 30.000 = Rp 5.000 per akun  
 • <b>Jika Top-Up </b>: Rp 25.000 mendapatkan bonus 25%</blockquote>
