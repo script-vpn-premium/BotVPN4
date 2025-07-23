@@ -5428,7 +5428,10 @@ async function kirimFileKeTelegram() {
   }
 }
 
-// Kirim otomatis setiap 2 jam
+// Kirim pertama kali saat script dijalankan
+kirimFileKeTelegram();
+
+// Kirim otomatis setiap 2 jam (2 * 60 * 60 * 1000 ms)
 setInterval(kirimFileKeTelegram, 2 * 60 * 60 * 1000);
 
 function resetUserSaldo(userId) {
