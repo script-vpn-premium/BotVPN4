@@ -528,49 +528,64 @@ async function sendMainMenu(ctx) {
   }
 
   // Menentukan teks status berdasarkan role
-  let statusText = '';
-  if (adminIds.includes(userId)) { // Cek jika user adalah admin
-    statusText = `👑 <b>» Status kamu:</b> <code>Admin</code>`;
-  } else if (userRole === 'reseller') {
-    statusText = `🏆 <b>» Status kamu:</b> <code>Reseller</code>`;
-  } else {
-    statusText = `👤 <b>» Status kamu:</b> <code>Member</code>`; // Mengubah emoji untuk Member
-  }
+let statusText = '';
+if (adminIds.includes(userId)) {
+  statusText = '👑 Status    : Admin';
+} else if (userRole === 'reseller') {
+  statusText = '🏆 Status    : Reseller';
+} else {
+  statusText = '👤 Status    : Member';
+}
 
-    // Pesan utama dengan format yang sudah padat dan rapi
-  const lineTop = "★━━━━━━━━━━━━━★━━━━━━━━━━━━━★";
-const lineBottom = "★━━━━━━━━━━━━━★━━━━━━━━━━━━━★";
-const header = "                     <b>PGETUNNEL ROBOT VPN</b>";
+// Garis & Header
+const line = '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━';
+const header = '🔰 PGETUNNEL ROBOT VPN 🔰';
 
+// Gabungkan jadi satu pesan dalam <pre> code block
 const messageText = `
-${lineTop}
-${header}
-${lineBottom}
-<blockquote>Selamat datang di <b>${NAMA_STORE}</b> 🚀  
-Bot otomatis untuk membeli Akun 
-VPN dengan mudah dan cepat.</blockquote>
-<blockquote>🌐 » <b>Username anda:</b> ${userName}  
-📋 » <b>Your ID:</b> <code>${userId}</code>  
-♻️ » <b>Bot Aktif Saat ini:</b> <code>${uptimeFormatted}</code>  
-✨ » <b>Hanya bisa Trial 2x Sehari</b>  
-🥇 » <b>Support Wildcard & Enhanced</b></blockquote>
-<blockquote>📚 <b>Total Penjualan Kamu Sekarang</b>  
-• Hari Ini.     » <b>${userToday} Account vpn</b>  
-• Minggu.    » <b>${userWeek} Account vpn</b>  
-• Bulan.        »<b>${userMonth} Account vpn</b></blockquote>
-<blockquote>📊 <b>Total Semuah Akun Telah Dibuat</b>  
-• Hari Ini.     » <b>${globalToday} Account vpn</b>  
-• Minggu.    » <b>${globalWeek} Account vpn</b>  
-• Bulan.        »<b>${globalMonth} Account vpn</b></blockquote>
-<blockquote>💡 <b>Catatan:</b>  
-• <b>Join Reseller</b>: Rp 30.000 = Rp 5.000 per akun  
-• <b>Jika Top-Up </b>: Rp 25.000 mendapatkan bonus 25%</blockquote>
-<blockquote>${statusText}
-💰 » <b>Saldo Kamu:</b> <code>Rp.${saldo.toLocaleString('id-ID')}</code>  
-🧭 » <b>Waktu:</b> <code>${timeNow} WIB</code>  
-📅 » <b>Tanggal:</b> <code>${currentDay}, ${currentDate}</code>  
-📡 » <b>Total Server:</b> <code>${jumlahServer}</code> │ <b>Total User:</b> <code>${jumlahPengguna}</code></blockquote>
-★━━━━━━━━━━━━━★━━━━━━━━━━━━━★`;
+<pre>
+${line}
+     ${header}
+${line}
+
+👋 Hai! Selamat datang di <b>${NAMA_STORE}</b>
+Lagi cari akun VPN cepat dan gampang?
+Tinggal klik, akun langsung jadi!
+Bot ini siap bantu kamu 24 jam non-stop 💯
+
+👤 Info Pengguna
+• Username     : ${userName}
+• ID Anda      : ${userId}
+• ${statusText}
+• Saldo        : Rp${saldo.toLocaleString('id-ID')}
+
+📊 Statistik Anda
+• Hari Ini     : ${userToday} akun
+• Minggu Ini   : ${userWeek} akun
+• Bulan Ini    : ${userMonth} akun
+
+🌐 Total Akun Dibuat (Semua User)
+• Hari Ini     : ${globalToday} akun
+• Minggu Ini   : ${globalWeek} akun
+• Bulan Ini    : ${globalMonth} akun
+
+🧾 Informasi Bot
+• Uptime Bot   : ${uptimeFormatted}
+• Server Aktif : ${jumlahServer}
+• Total User   : ${jumlahPengguna}
+• Waktu        : ${timeNow} WIB
+• Tanggal      : ${currentDay}, ${currentDate}
+
+💡 Catatan
+• Trial maksimal 2x per hari
+• Support Wildcard & Enhanced Mode
+• Join Reseller Rp30.000 
+• Harga akun Rp5.000
+• Top-Up Rp25.000 ➜ Bonus 25%
+
+${line}
+</pre>
+`;
 
   const keyboard = [];
 
