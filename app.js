@@ -565,7 +565,7 @@ VPN dengan mudah dan cepat.</blockquote>
 • Bulan.        👉 <b>${globalMonth} Account vpn</b></blockquote>
 <blockquote>💡 <b>Catatan:</b>  
 • <b>Join Reseller</b>: Rp 30.000 = Rp 5.000 per akun  
-• <b>Top-Up Minimum</b>: Rp 25.000 Dapat bonus 25%</blockquote>
+• <b>Jika Top-Up </b>: Rp 25.000 mendapatkan bonus 25%</blockquote>
 <blockquote>💲 <b>Saldo Kamu:</b> <code>Rp.${saldo.toLocaleString('id-ID')}</code>  
 🧭 <b>Waktu:</b> <code>${timeNow} WIB</code>  
 📅 <b>Tanggal:</b> <code>${currentDay}, ${currentDate}</code>  
