@@ -532,7 +532,7 @@ async function sendMainMenu(ctx) {
   if (adminIds.includes(userId)) { // Cek jika user adalah admin
     statusText = `👑 <b>» Status kamu:</b> <code>Admin</code>`;
   } else if (userRole === 'reseller') {
-    statusText = `🏆 <b>» Status:</b> <code>Reseller</code>`;
+    statusText = `🏆 <b>» Status kamu:</b> <code>Reseller</code>`;
   } else {
     statusText = `👤 <b>» Status:</b> <code>Member</code>`; // Mengubah emoji untuk Member
   }
