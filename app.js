@@ -413,17 +413,16 @@ async function sendMainMenu(ctx) {
       logger.info(`🧹 Menu lama milik ${userId} dihapus oleh sendMainMenu`);
       delete lastMenus[userId]; 
     } catch (e) {
-
       console.warn(`⚠️ Gagal hapus menu lama user ${userId} di sendMainMenu:`, e.message);
     }
   }
-  
+
   const userName = ctx.from.username ? `@${ctx.from.username}` : (ctx.from.first_name || 'Member');
   let saldo = 0;
   let userRole = 'member';
   try {
     const row = await new Promise((resolve, reject) => {
-      db.get('SELECT saldo, role FROM users WHERE user_id = ?', [userId], (err, row) => { // Mengambil saldo dan role
+      db.get('SELECT saldo, role FROM users WHERE user_id = ?', [userId], (err, row) => {
         if (err) reject(err); else resolve(row);
       });
     });
@@ -443,7 +442,6 @@ async function sendMainMenu(ctx) {
   let globalToday = 0, globalWeek = 0, globalMonth = 0;
 
   try {
-    // Statistik Anda
     userToday = await new Promise((resolve) => {
       db.get('SELECT COUNT(*) as count FROM log_penjualan WHERE user_id = ? AND waktu_transaksi >= ? AND action_type IN ("create","renew")', [userId, todayStart], (err, row) => resolve(row ? row.count : 0));
     });
@@ -454,7 +452,6 @@ async function sendMainMenu(ctx) {
       db.get('SELECT COUNT(*) as count FROM log_penjualan WHERE user_id = ? AND waktu_transaksi >= ? AND action_type IN ("create","renew")', [userId, monthStart], (err, row) => resolve(row ? row.count : 0));
     });
 
-    // Statistik Global
     globalToday = await new Promise((resolve) => {
       db.get('SELECT COUNT(*) as count FROM log_penjualan WHERE waktu_transaksi >= ? AND action_type IN ("create","renew")', [todayStart], (err, row) => resolve(row ? row.count : 0));
     });
@@ -468,7 +465,6 @@ async function sendMainMenu(ctx) {
     logger.error('Error fetching statistics:', e.message);
   }
 
-  // Jumlah pengguna bot
   let jumlahPengguna = 0;
   try {
     const row = await new Promise((resolve, reject) => {
@@ -477,10 +473,36 @@ async function sendMainMenu(ctx) {
     jumlahPengguna = row.count;
   } catch (e) { jumlahPengguna = 0; }
 
-  // Latency (dummy, bisa diubah sesuai kebutuhan)
+  // Ambil total orang yang pernah top-up
+  let totalUserTopup = 0;
+  try {
+    const row = await new Promise((resolve, reject) => {
+      db.get('SELECT COUNT(DISTINCT user_id) AS count FROM topup_log', (err, row) => {
+        if (err) reject(err); else resolve(row);
+      });
+    });
+    totalUserTopup = row.count;
+  } catch (e) {
+    logger.error('Gagal ambil data total user topup:', e.message);
+    totalUserTopup = 0;
+  }
+
+  // Ambil total nominal top-up
+  let totalTopup = 0;
+  try {
+    const row = await new Promise((resolve, reject) => {
+      db.get('SELECT SUM(amount) AS total FROM topup_log', (err, row) => {
+        if (err) reject(err); else resolve(row);
+      });
+    });
+    totalTopup = row.total || 0;
+  } catch (e) {
+    logger.error('Gagal ambil total nominal topup:', e.message);
+    totalTopup = 0;
+  }
+
   const latency = (Math.random() * 0.1 + 0.01).toFixed(2);
 
-  // Ambil status tombol trial dari database
   const tombolTrialAktif = await new Promise((resolve) => {
     db.get('SELECT show_trial_button FROM ui_config WHERE id = 1', (err, row) => {
       if (err) return resolve(false);
@@ -498,7 +520,6 @@ async function sendMainMenu(ctx) {
   const isAdmin = adminIds.includes(userId);
   const bolehLihatTrial = tombolTrialAktif || isUnlimited || isAdmin;
 
-  // Uptime bot
   const uptime = os.uptime();
   const days = Math.floor(uptime / 86400);
   const hours = Math.floor((uptime % 86400) / 3600);
@@ -506,7 +527,6 @@ async function sendMainMenu(ctx) {
   const seconds = Math.floor(uptime % 60);
   const uptimeFormatted = `${days}d ${hours}h ${minutes}m ${seconds}s`;
 
-  // Tanggal dan waktu saat ini
   const dayNames = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
   const currentDay = dayNames[now.getDay()];
   const currentDate = new Intl.DateTimeFormat('id-ID', {
@@ -527,21 +547,18 @@ async function sendMainMenu(ctx) {
     logger.error('Gagal ambil data jumlah server:', e.message);
   }
 
-  // Menentukan teks status berdasarkan role
-let statusText = '';
-if (adminIds.includes(userId)) {
-  statusText = '👑 Status    : Admin';
-} else if (userRole === 'reseller') {
-  statusText = '🏆 Status    : Reseller';
-} else {
-  statusText = '👤 Status    : Member';
-}
+  let statusText = '';
+  if (adminIds.includes(userId)) {
+    statusText = '👑 Status      : Admin';
+  } else if (userRole === 'reseller') {
+    statusText = '🏆 Status      : Reseller';
+  } else {
+    statusText = '👤 Status      : Member';
+  }
 
-// Garis & Header
-const line = '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━';
+  const line = '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━';
 const header = '🔰 PGETUNNEL ROBOT VPN 🔰';
 
-// Gabungkan jadi satu pesan dalam <pre> code block
 const messageText = `
 <pre>
 ${line}
@@ -554,27 +571,32 @@ Tinggal klik, akun langsung jadi!
 Bot ini siap bantu kamu 24 jam non-stop 💯
 
 👤 Info Pengguna
-• Username     : ${userName}
-• ID Anda      : ${userId}
+• Username       : ${userName}
+• ID Anda        : ${userId}
 • ${statusText}
-• Saldo        : Rp${saldo.toLocaleString('id-ID')}
+• Saldo          : Rp${saldo.toLocaleString('id-ID')}
 
 📊 Statistik Anda
-• Hari Ini     : ${userToday} akun
-• Minggu Ini   : ${userWeek} akun
-• Bulan Ini    : ${userMonth} akun
+• Hari Ini       : ${userToday} akun
+• Minggu Ini     : ${userWeek} akun
+• Bulan Ini      : ${userMonth} akun
 
 🌐 Total Akun Dibuat (Semua User)
-• Hari Ini     : ${globalToday} akun
-• Minggu Ini   : ${globalWeek} akun
-• Bulan Ini    : ${globalMonth} akun
+• Hari Ini       : ${globalToday} akun
+• Minggu Ini     : ${globalWeek} akun
+• Bulan Ini      : ${globalMonth} akun
 
 🧾 Informasi Bot
-• Uptime Bot   : ${uptimeFormatted}
-• Server Aktif : ${jumlahServer}
-• Total User   : ${jumlahPengguna}
-• Waktu        : ${timeNow} WIB
-• Tanggal      : ${currentDay}, ${currentDate}
+• Uptime Bot     : ${uptimeFormatted}
+• Server Aktif   : ${jumlahServer}
+• Total User     : ${jumlahPengguna}
+• Top-Up User    : ${totalUserTopup} orang
+
+💰 Pendapatan Admin
+• Total Masuk    : Rp${totalTopup.toLocaleString('id-ID')}
+
+🕒 Waktu         : ${timeNow} WIB
+📅 Tanggal       : ${currentDay}, ${currentDate}
 
 💡 Catatan
 • Trial maksimal 2x per hari
@@ -586,7 +608,6 @@ Bot ini siap bantu kamu 24 jam non-stop 💯
 ${line}
 </pre>
 `;
-
   const keyboard = [];
 
 if (bolehLihatTrial) {
