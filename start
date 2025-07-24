@@ -90,8 +90,17 @@ read -p "Masukkan token bot: " token
 
     read -p "Masukkan API KEY: " apikey
     while [ -z "$apikey" ]; do read -p "Masukkan API KEY: " apikey; done
-        
+    
+    read -p "Masukkan Chat ID Group Telegram: " chatid_group
+    while [ -z "$apikey" ]; do read -p "Masukkan API KEY: " chatid_group; done
+    
+    read -p "Masukkan Username Saweria: " username_saweria
+    while [ -z "$apikey" ]; do read -p "Masukkan API KEY: " username_saweria; done
+    
+    read -p "Masukkan Email Saweria: " saweria_email
+    while [ -z "$apikey" ]; do read -p "Masukkan API KEY: " saweria_email; done
 
+        
     # Simpan konfigurasi ke file .vars.json
     cat >/root/BotVPN4/.vars.json <<EOF
 {
