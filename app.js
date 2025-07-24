@@ -473,7 +473,6 @@ async function sendMainMenu(ctx) {
     jumlahPengguna = row.count;
   } catch (e) { jumlahPengguna = 0; }
 
-  // Ambil total orang yang pernah top-up
   let totalUserTopup = 0;
   try {
     const row = await new Promise((resolve, reject) => {
@@ -487,7 +486,6 @@ async function sendMainMenu(ctx) {
     totalUserTopup = 0;
   }
 
-  // Ambil total nominal top-up
   let totalTopup = 0;
   try {
     const row = await new Promise((resolve, reject) => {
@@ -501,7 +499,37 @@ async function sendMainMenu(ctx) {
     totalTopup = 0;
   }
 
-  const latency = (Math.random() * 0.1 + 0.01).toFixed(2);
+  let totalTopupUser = 0;
+  try {
+    const row = await new Promise((resolve, reject) => {
+      db.get('SELECT SUM(amount) AS total FROM topup_log WHERE user_id = ?', [userId], (err, row) => {
+        if (err) reject(err); else resolve(row);
+      });
+    });
+    totalTopupUser = row.total || 0;
+  } catch (e) {
+    logger.error('Gagal ambil total topup user:', e.message);
+    totalTopupUser = 0;
+  }
+
+  // ✅ Pendapatan jualan per user
+  let totalPenjualanUser = 0;
+  try {
+    const row = await new Promise((resolve, reject) => {
+      db.get(
+        'SELECT SUM(harga) AS total FROM log_penjualan WHERE user_id = ? AND action_type IN ("create", "renew")',
+        [userId],
+        (err, row) => {
+          if (err) reject(err);
+          else resolve(row);
+        }
+      );
+    });
+    totalPenjualanUser = row.total || 0;
+  } catch (e) {
+    logger.error('Gagal ambil total pendapatan penjualan user:', e.message);
+    totalPenjualanUser = 0;
+  }
 
   const tombolTrialAktif = await new Promise((resolve) => {
     db.get('SELECT show_trial_button FROM ui_config WHERE id = 1', (err, row) => {
@@ -557,9 +585,9 @@ async function sendMainMenu(ctx) {
   }
 
   const line = '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━';
-const header = '🔰 PGETUNNEL ROBOT VPN 🔰';
+  const header = '🔰 PGETUNNEL ROBOT VPN 🔰';
 
-const messageText = `
+  const messageText = `
 <pre>
 ${line}
      ${header}
@@ -575,6 +603,8 @@ Bot ini siap bantu kamu 24 jam non-stop 💯
 • ID Anda        : ${userId}
 • ${statusText}
 • Saldo          : Rp${saldo.toLocaleString('id-ID')}
+• Topup Anda     : Rp${totalTopupUser.toLocaleString('id-ID')}
+• Jualan Anda    : Rp${totalPenjualanUser.toLocaleString('id-ID')}
 
 📊 Statistik Anda
 • Hari Ini       : ${userToday} akun
