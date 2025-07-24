@@ -100,7 +100,6 @@ read -p "Masukkan token bot: " token
     read -p "Masukkan Email Saweria: " saweria_email
     while [ -z "$apikey" ]; do read -p "Masukkan API KEY: " saweria_email; done
 
-        
     # Simpan konfigurasi ke file .vars.json
     cat >/root/BotVPN4/.vars.json <<EOF
 {
