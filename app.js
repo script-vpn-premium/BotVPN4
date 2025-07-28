@@ -413,16 +413,17 @@ async function sendMainMenu(ctx) {
       logger.info(`🧹 Menu lama milik ${userId} dihapus oleh sendMainMenu`);
       delete lastMenus[userId]; 
     } catch (e) {
+
       console.warn(`⚠️ Gagal hapus menu lama user ${userId} di sendMainMenu:`, e.message);
     }
   }
-
+  
   const userName = ctx.from.username ? `@${ctx.from.username}` : (ctx.from.first_name || 'Member');
   let saldo = 0;
   let userRole = 'member';
   try {
     const row = await new Promise((resolve, reject) => {
-      db.get('SELECT saldo, role FROM users WHERE user_id = ?', [userId], (err, row) => {
+      db.get('SELECT saldo, role FROM users WHERE user_id = ?', [userId], (err, row) => { // Mengambil saldo dan role
         if (err) reject(err); else resolve(row);
       });
     });
@@ -442,6 +443,7 @@ async function sendMainMenu(ctx) {
   let globalToday = 0, globalWeek = 0, globalMonth = 0;
 
   try {
+    // Statistik Anda
     userToday = await new Promise((resolve) => {
       db.get('SELECT COUNT(*) as count FROM log_penjualan WHERE user_id = ? AND waktu_transaksi >= ? AND action_type IN ("create","renew")', [userId, todayStart], (err, row) => resolve(row ? row.count : 0));
     });
@@ -452,6 +454,7 @@ async function sendMainMenu(ctx) {
       db.get('SELECT COUNT(*) as count FROM log_penjualan WHERE user_id = ? AND waktu_transaksi >= ? AND action_type IN ("create","renew")', [userId, monthStart], (err, row) => resolve(row ? row.count : 0));
     });
 
+    // Statistik Global
     globalToday = await new Promise((resolve) => {
       db.get('SELECT COUNT(*) as count FROM log_penjualan WHERE waktu_transaksi >= ? AND action_type IN ("create","renew")', [todayStart], (err, row) => resolve(row ? row.count : 0));
     });
@@ -465,6 +468,7 @@ async function sendMainMenu(ctx) {
     logger.error('Error fetching statistics:', e.message);
   }
 
+  // Jumlah pengguna bot
   let jumlahPengguna = 0;
   try {
     const row = await new Promise((resolve, reject) => {
@@ -473,64 +477,10 @@ async function sendMainMenu(ctx) {
     jumlahPengguna = row.count;
   } catch (e) { jumlahPengguna = 0; }
 
-  let totalUserTopup = 0;
-  try {
-    const row = await new Promise((resolve, reject) => {
-      db.get('SELECT COUNT(DISTINCT user_id) AS count FROM topup_log', (err, row) => {
-        if (err) reject(err); else resolve(row);
-      });
-    });
-    totalUserTopup = row.count;
-  } catch (e) {
-    logger.error('Gagal ambil data total user topup:', e.message);
-    totalUserTopup = 0;
-  }
+  // Latency (dummy, bisa diubah sesuai kebutuhan)
+  const latency = (Math.random() * 0.1 + 0.01).toFixed(2);
 
-  let totalTopup = 0;
-  try {
-    const row = await new Promise((resolve, reject) => {
-      db.get('SELECT SUM(amount) AS total FROM topup_log', (err, row) => {
-        if (err) reject(err); else resolve(row);
-      });
-    });
-    totalTopup = row.total || 0;
-  } catch (e) {
-    logger.error('Gagal ambil total nominal topup:', e.message);
-    totalTopup = 0;
-  }
-
-  let totalTopupUser = 0;
-  try {
-    const row = await new Promise((resolve, reject) => {
-      db.get('SELECT SUM(amount) AS total FROM topup_log WHERE user_id = ?', [userId], (err, row) => {
-        if (err) reject(err); else resolve(row);
-      });
-    });
-    totalTopupUser = row.total || 0;
-  } catch (e) {
-    logger.error('Gagal ambil total topup user:', e.message);
-    totalTopupUser = 0;
-  }
-
-  // ✅ Pendapatan jualan per user
-  let totalPenjualanUser = 0;
-  try {
-    const row = await new Promise((resolve, reject) => {
-      db.get(
-        'SELECT SUM(harga) AS total FROM log_penjualan WHERE user_id = ? AND action_type IN ("create", "renew")',
-        [userId],
-        (err, row) => {
-          if (err) reject(err);
-          else resolve(row);
-        }
-      );
-    });
-    totalPenjualanUser = row.total || 0;
-  } catch (e) {
-    logger.error('Gagal ambil total pendapatan penjualan user:', e.message);
-    totalPenjualanUser = 0;
-  }
-
+  // Ambil status tombol trial dari database
   const tombolTrialAktif = await new Promise((resolve) => {
     db.get('SELECT show_trial_button FROM ui_config WHERE id = 1', (err, row) => {
       if (err) return resolve(false);
@@ -548,6 +498,7 @@ async function sendMainMenu(ctx) {
   const isAdmin = adminIds.includes(userId);
   const bolehLihatTrial = tombolTrialAktif || isUnlimited || isAdmin;
 
+  // Uptime bot
   const uptime = os.uptime();
   const days = Math.floor(uptime / 86400);
   const hours = Math.floor((uptime % 86400) / 3600);
@@ -555,6 +506,7 @@ async function sendMainMenu(ctx) {
   const seconds = Math.floor(uptime % 60);
   const uptimeFormatted = `${days}d ${hours}h ${minutes}m ${seconds}s`;
 
+  // Tanggal dan waktu saat ini
   const dayNames = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
   const currentDay = dayNames[now.getDay()];
   const currentDate = new Intl.DateTimeFormat('id-ID', {
@@ -575,77 +527,73 @@ async function sendMainMenu(ctx) {
     logger.error('Gagal ambil data jumlah server:', e.message);
   }
 
+  // Menentukan teks status berdasarkan role
   let statusText = '';
-  if (adminIds.includes(userId)) {
-    statusText = '👑 Status    : Admin';
+  if (adminIds.includes(userId)) { // Cek jika user adalah admin
+    statusText = `👑 <b>» Status kamu:</b> <code>Admin</code>`;
   } else if (userRole === 'reseller') {
-    statusText = '🏆 Status    : Reseller';
+    statusText = `🏆 <b>» Status kamu:</b> <code>Reseller</code>`;
   } else {
-    statusText = '👤 Status    : Member';
+    statusText = `👤 <b>» Status kamu:</b> <code>Member</code>`; // Mengubah emoji untuk Member
   }
-  const line = '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━';
-  const header = '🔰 PGETUNNEL ROBOT VPN 🔰';
-  const messageText = `
-<pre>
-${line}
-     ${header}
-${line}
-Hai! Selamat datang di <b>${NAMA_STORE}</b>
-Lagi cari akun VPN cepat gampang?
-Tinggal klik, akun langsung jadi!
-Bot ini siap bantu kamu 24 jam
-${line}
-👤 Info Pengguna
-• Username     : ${userName}
-• ID Anda      : ${userId}
-• ${statusText}
-• Saldo Anda   : Rp${saldo.toLocaleString('id-ID')}
-• Saldo masuk  : Rp${totalTopupUser.toLocaleString('id-ID')}
-• Saldo keluar : Rp${totalPenjualanUser.toLocaleString('id-ID')}
 
-📊 Statistik Anda
-• Hari Ini     : ${userToday} akun
-• Minggu Ini   : ${userWeek} akun
-• Bulan Ini    : ${userMonth} akun
+  // Pesan utama dengan format yang sudah padat dan rapi
+  const messageText = `✦✦✦✦✦✦✦✦✦✦✦✦✦✦✦✦✦✦✦✦✦
+🔥 Mau VPN cepat, murah, langsung jadi?
 
-🌐 Total Akun Dibuat (Semua User)
-• Hari Ini     : ${globalToday} akun
-• Minggu Ini   : ${globalWeek} akun
-• Bulan Ini    : ${globalMonth} akun
+📲 <b>${NAMA_STORE}</b> siap bantu!  
+🤖 Bot otomatis 24 jam nonstop  
+🚀 Proses super cepat — cuma 5 detik!  
+🌍 Akses semua situs yang diblokir 
 
-🧾 Informasi Bot
-• Uptime Bot   : ${uptimeFormatted}
-• Server Aktif : ${jumlahServer} Server
-• Total User   : ${jumlahPengguna} Orang
-• Top-Up User  : ${totalUserTopup} orang
+✅ Gak perlu nunggu admin  
+✅ Pembayaran langsung aktif  
+✅ Bisa jadi reseller, cuan tiap hari!
 
-👤 Pendapatan Admin
-💳 uang Masuk : Rp${totalTopup.toLocaleString('id-ID')}
+🌐 <b>» Username:</b> ${userName}
+📋 <b>» Your ID:</b> <code>${userId}</code>
+✨ <b>» Trial 2x Sehari</b>
+🥇 <b>» Support Wildcard & Enhanced</b>
 
-🕒 Waktu    : ${timeNow} WIB
-📅 Tanggal  : ${currentDay}, ${currentDate}
-${line}
-• Support Wildcard & Enhanced
-${line}
-</pre>
-`;
+<blockquote>
+📊 <b>Statistik Anda</b>
+• Hari ini : <b>${userToday}</b> akun  
+• Minggu ini : <b>${userWeek}</b> akun  
+• Bulan ini : <b>${userMonth}</b> akun
+
+🌐 <b>Statistik Keseluruhan</b>
+• Hari ini : <b>${globalToday}</b> akun  
+• Minggu ini : <b>${globalWeek}</b> akun  
+• Bulan ini : <b>${globalMonth}</b> akun
+</blockquote>
+${statusText}
+💳 <b>» Saldo kamu:</b> <code>Rp.${saldo.toLocaleString('id-ID')}</code>
+🧭 <b>» Waktu:</b> <code>${timeNow} WIB</code>
+🏷️ <b>» Tanggal :</b> <code>${currentDay}, ${currentDate}</code>
+🏷️ <b>» Total Server:</b> <code>${jumlahServer}</code> <b>|️ Total User:</b> <code>${jumlahPengguna}</code>
+♻️ <b>» Bot Aktif:</b> <code>${uptimeFormatted}</code>
+
+👥 <b>Ingin penghasilan tambahan?</b>
+❇️ Bergabunglah sebagai <b>Reseller</b> Kami
+☑️ lebih murah 5.000 aja! serta keuntungan 
+☑️ menarik! disini yuk bergabung sekarang
+💬 Hubungi admin: <a href="https://t.me/JesVpnt">Klik di sini</a>
+✦✦✦✦✦✦✦✦✦✦✦✦✦✦✦✦✦✦✦✦✦`;
   const keyboard = [];
 
-if (bolehLihatTrial) {
+  if (bolehLihatTrial) {
   keyboard.push([
-    { text: '🧪 Trial Akun', callback_data: 'service_trial' },
-    { text: '📦 Order Script', url: 'https://t.me/subdom_robot' }
+    { text: '🧪 Trial akun', callback_data: 'service_trial' }
   ]);
 }
 
 keyboard.push([
-  { text: '📝 Buat Akun', callback_data: 'service_create' },
-  { text: '🔄 Renew Akun', callback_data: 'service_renew' }
+  { text: '📝 Buat akun', callback_data: 'service_create' },
+  { text: '🔄 Renew akun', callback_data: 'service_renew' }
 ]);
 
 keyboard.push([
-  { text: '💳 TopUp Saldo', callback_data: 'menu_topup' },
-  { text: '🤝 Join Reseller', callback_data: 'daftar_1bln' }
+  { text: '💳 TopUp saldo', callback_data: 'menu_topup' }
 ]);
 
   try {
@@ -1687,28 +1635,7 @@ bot.action(/^daftar_(\d+)bln$/, async (ctx) => {
     step: 'sewascript_create_input',
     bulan
   };
-  await ctx.reply(
-  `\`\`\`
-💸 CARI CUAN DARI HP? JADI RESELLER VPN AJA!
-
-🧐 Apa itu Reseller VPN?
-
-Gampangnya gini:
-Kamu beli akun VPN dengan harga murah, 
-lalu jual lagi ke orang lain dengan harga
-lebih tinggi. Untungnya jadi milik kamu 💰
-
-Contoh:
-Kamu Sudah join Reseller Harga akun 
-menjadi Rp 5.000 Lalu kamu jual 
-ke teman kamu Rp 10.000 Kamu
-dapet untung Rp 5.000. 
-
-Join Menjadi Reseller Modal kmu Rp30.000
-Unlimited Trial Status Reseller
-\`\`\`*☑️ Join yuk Jadi Reseller* @JesVpnt`,
-  { parse_mode: 'MarkdownV2' }
-);
+  await ctx.reply('♂️ *Masukkan username:*', { parse_mode: 'Markdown' });
 });
 
 bot.action(/^perpanjang_(\d+)bln$/, async (ctx) => {
@@ -1993,7 +1920,7 @@ async function startSelectServer(ctx, action, type, page = 0) {
         const isFull = server.total_create_akun >= server.batas_create_akun;
         return `🌐 *${server.nama_server}*\n` +
                `💰 Harga per hari: Rp${hargaPerHariTampilan}\n` + // Menggunakan harga yang disesuaikan
-               `📅 Harga per 30 hari: Rp${hargaPer30HariTampilan}\n` + // Menggunakan harga yang disesuaikan
+               `?? Harga per 30 hari: Rp${hargaPer30HariTampilan}\n` + // Menggunakan harga yang disesuaikan
                `📊 Quota: ${server.quota}GB\n` +
                `🔢 Limit IP: ${server.iplimit} IP\n` +
                (isFull ? `⚠️ *Server Penuh*` : `👥 Total Create Akun: ${server.total_create_akun}/${server.batas_create_akun}`);
@@ -4987,7 +4914,7 @@ function keyboard_full() {
     }));
     buttons.push(row);
   }
-  buttons.push([{ text: '?? Hapus', callback_data: 'delete' }, { text: '✅ Konfirmasi', callback_data: 'confirm' }]);
+  buttons.push([{ text: '🔙 Hapus', callback_data: 'delete' }, { text: '✅ Konfirmasi', callback_data: 'confirm' }]);
   buttons.push([{ text: '🔙 Kembali ke Menu Utama', callback_data: 'send_main_menu' }]);
   return buttons;
 }
@@ -5490,11 +5417,9 @@ async function kirimFileKeTelegram() {
   }
 }
 
-// Kirim pertama kali saat script dijalankan
-kirimFileKeTelegram();
-
 // Kirim otomatis setiap 2 jam (2 * 60 * 60 * 1000 ms)
 setInterval(kirimFileKeTelegram, 2 * 60 * 60 * 1000);
+
 
 function resetUserSaldo(userId) {
   return new Promise((resolve, reject) => {
