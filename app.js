@@ -4721,7 +4721,7 @@ const { qrBuffer } = await qris.generateQR(finalAmount);
 const caption =
   `🧾 *Pembayaran:*\n\n` +
   `💵 Nominal: Rp ${finalAmount}\n` +
-  `⏳ Batas: 5 menit\n` +
+  `⏳ Batas pembayaran: 1 jam\n` +
   `⚠️ Transfer *harus* sesuai\n\n` +
   `✅ Otomatis terverifikasi\n` +
   `📌 Jangan tutup halaman ini`;
@@ -4821,7 +4821,7 @@ async function checkQRISStatus() {
       if (deposit.status !== 'pending') continue;
       
       const depositAge = Date.now() - deposit.timestamp;
-      if (depositAge > 5 * 60 * 1000) {
+      if (depositAge > 1 * 60 * 60 * 1000) {
         try {
           if (deposit.qrMessageId) {
             await bot.telegram.deleteMessage(deposit.userId, deposit.qrMessageId);
