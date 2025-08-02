@@ -530,57 +530,47 @@ async function sendMainMenu(ctx) {
   // Menentukan teks status berdasarkan role
   let statusText = '';
   if (adminIds.includes(userId)) { // Cek jika user adalah admin
-    statusText = `👑 <b>» Status kamu:</b> <code>Admin</code>`;
+    statusText = `👑 <b>Status : </b> <code>Admin</code>`;
   } else if (userRole === 'reseller') {
-    statusText = `🏆 <b>» Status kamu:</b> <code>Reseller</code>`;
+    statusText = `🏆 <b>Status :</b> <code>Reseller</code>`;
   } else {
-    statusText = `👤 <b>» Status kamu:</b> <code>Member</code>`; // Mengubah emoji untuk Member
+    statusText = `👤 <b>Status :</b> <code>Member</code>`; // Mengubah emoji untuk Member
   }
 
   // Pesan utama dengan format yang sudah padat dan rapi
-  const messageText = `✦✦✦✦✦✦✦✦✦✦✦✦✦✦✦✦✦✦✦✦✦
-🔥 Mau VPN cepat, murah, langsung jadi?
-
-📲 <b>${NAMA_STORE}</b> siap bantu!  
-🤖 Bot otomatis 24 jam nonstop  
-🚀 Proses super cepat — cuma 5 detik!  
-🌍 Akses semua situs yang diblokir 
-
-✅ Gak perlu nunggu admin  
-✅ Pembayaran langsung aktif  
-✅ Bisa jadi reseller, cuan tiap hari!
-
-🌐 <b>» Username:</b> ${userName}
-📋 <b>» Your ID:</b> <code>${userId}</code>
-✨ <b>» Trial 2x Sehari</b>
-🥇 <b>» Support Wildcard & Enhanced</b>
-
+  const messageText = `💎 <b>${NAMA_STORE}</b>  
+✅ Tanpa nunggu admin  
+✅ Pembayaran otomatis aktif  
+✅ Bisa jadi reseller & cuan tiap hari!
 <blockquote>
-📊 <b>Statistik Anda</b>
-• Hari ini : <b>${userToday}</b> akun  
-• Minggu ini : <b>${userWeek}</b> akun  
-• Bulan ini : <b>${userMonth}</b> akun
+📊 <b>Statistik Kamu</b>
+━━━━━━━━━━━━━━━━━━━━━━
+• Hari ini         : <b>${userToday}</b> akun  
+• Minggu ini   : <b>${userWeek}</b> akun  
+• Bulan ini      : <b>${userMonth}</b> akun  
 
-🌐 <b>Statistik Keseluruhan</b>
-• Hari ini : <b>${globalToday}</b> akun  
-• Minggu ini : <b>${globalWeek}</b> akun  
-• Bulan ini : <b>${globalMonth}</b> akun
-</blockquote>
-${statusText}
-💳 <b>» Saldo kamu:</b> <code>Rp.${saldo.toLocaleString('id-ID')}</code>
-🧭 <b>» Waktu:</b> <code>${timeNow} WIB</code>
-🏷️ <b>» Tanggal :</b> <code>${currentDay}, ${currentDate}</code>
-🏷️ <b>» Total Server:</b> <code>${jumlahServer}</code> <b>|️ Total User:</b> <code>${jumlahPengguna}</code>
-♻️ <b>» Bot Aktif:</b> <code>${uptimeFormatted}</code>
+🌐 <b>Statistik Global</b>
+• Hari ini         : <b>${globalToday}</b> akun  
+• Minggu ini   : <b>${globalWeek}</b> akun  
+• Bulan ini      : <b>${globalMonth}</b> akun 
+━━━━━━━━━━━━━━━━━━━━━━ 
+</blockquote>${statusText}
+🧑‍💻 <b>User:</b> ${userName}  
+🆔 <b>ID Kamu:</b> <code>${userId}</code>  
+🥇 <b>Support Wildcard</b>  
+💳 <b>Saldo:</b> <code>Rp${saldo.toLocaleString('id-ID')}</code>  
+📡 <b>Total Server:</b> <code>${jumlahServer}</code>  
+👥 <b>Total Pengguna:</b> <code>${jumlahPengguna}</code>  
+♻️ <b>Bot Aktif:</b> <code>${uptimeFormatted}</code>
+<blockquote>
+💼 <b>Ingin Penghasilan Tambahan?</b>  
+❇️ Gabung jadi <b>Reseller</b> hanya <b>Rp 5.000</b>  
+✅ Dapat harga lebih murah  
+✅ Untung tiap transaksi!
 
-👥 <b>Ingin penghasilan tambahan?</b>
-❇️ Bergabunglah sebagai <b>Reseller</b> Kami
-☑️ lebih murah 5.000 aja! serta keuntungan 
-☑️ menarik! disini yuk bergabung sekarang
-💬 Hubungi admin: <a href="https://t.me/JesVpnt">Klik di sini</a>
-✦✦✦✦✦✦✦✦✦✦✦✦✦✦✦✦✦✦✦✦✦`;
+📞 <b>Hubungi Admin:</b> <a href="https://t.me/JesVpnt">Klik di sini</a>
+</blockquote>`;
   const keyboard = [];
-
   if (bolehLihatTrial) {
   keyboard.push([
     { text: '🧪 Trial akun', callback_data: 'service_trial' }
@@ -593,7 +583,7 @@ keyboard.push([
 ]);
 
 keyboard.push([
-  { text: '💳 TopUp saldo', callback_data: 'menu_topup' }
+  { text: '💳 TopUp saldo', callback_data: 'topup_saldo' }
 ]);
 
   try {
@@ -786,7 +776,7 @@ bot.action(/^batal_topup_(.+)$/, async (ctx) => {
       parse_mode: 'Markdown',
       reply_markup: {
         inline_keyboard: [
-          [{ text: '🔙 Kembali ke Menu Top-up', callback_data: 'menu_topup' }]
+          [{ text: '💳 Top-up kembali', callback_data: 'topup_saldo' }]
         ]
       }
     });
@@ -807,10 +797,9 @@ bot.action(/^batal_topup_(.+)$/, async (ctx) => {
       console.warn(`⚠️ Tidak bisa hapus pesan command user ${userId}:`, e.message);
     }
 
-  } catch (e) {
+    } catch (e) {
     logger.error('Gagal batal topup:', e);
-    await ctx.answerCbQuery('Gagal batal topup.', { show_alert: true });
-  }
+    await ctx.answerCbQuery('Gagal batal topup.', { show_alert: true });}
 });
 
 bot.action('statistik_penjualan', async (ctx) => {
@@ -909,199 +898,6 @@ bot.command('addsaldo', async (ctx) => {
       });
   });
 });
-
-// ========================= MENU TOPUP PILIHAN ==========================
-bot.action('menu_topup', async (ctx) => {
-  await ctx.answerCbQuery();
-
-  // Hapus pesan menu topup sebelumnya jika ada
-  try {
-    if (ctx.callbackQuery?.message?.message_id) {
-      await ctx.deleteMessage(ctx.callbackQuery.message.message_id);
-    }
-  } catch (e) {
-    // ignore error
-  }
-
-  const config = loadButtonConfig ? loadButtonConfig() : { topup_saldo: true, topup_saweria: true };
-  const keyboard = [];
-  if (config.topup_saldo)
-    keyboard.push([{ text: "💸 Topup QRIS Orkut", callback_data: "topup_saldo" }]);
-  if (config.topup_saweria)
-    keyboard.push([{ text: "💸 Topup QRIS Saweria", callback_data: "topup_saweria" }]);
-  keyboard.push([{ text: "🔙 Kembali", callback_data: "send_main_menu" }]);
-
-  // ...generate messageText sesuai menu_topup lama...
-  const messageText = `
-━━━━━━━━━━━━━━━━━━━━━━
-         🏷️ *≡ ROBOT VPN ≡* 🏷️
-━━━━━━━━━━━━━━━━━━━━━━
-💸 *» Pilih Menu Topup Dibawah Ini:*`;
-
-  const sent = await ctx.reply(messageText, {
-    parse_mode: 'Markdown',
-    reply_markup: { inline_keyboard: keyboard }
-  });
-
-  // Tracking pesan topup yang terakhir (opsional, jika ingin hapus lagi setelahnya)
-  if (sent?.message_id) {
-    lastMenus[ctx.from.id] = sent.message_id;
-  }
-});
-
-async function processDepositSaweria(ctx, amount) {
-  try {
-    const SAWERIA_USERNAME = process.env.SAWERIA_USERNAME || vars.SAWERIA_USERNAME;
-    const SAWERIA_EMAIL = process.env.SAWERIA_EMAIL || vars.SAWERIA_EMAIL;
-
-    if (!SAWERIA_USERNAME || !SAWERIA_EMAIL) {
-      return ctx.reply('❌ *Konfigurasi Saweria belum lengkap.*', { parse_mode: 'Markdown' });
-    }
-
-    const amountInt = parseInt(amount);
-    const apiUrl = `https://saweria.autsc.my.id/api/create?username=${encodeURIComponent(SAWERIA_USERNAME)}&amount=${amountInt}&email=${encodeURIComponent(SAWERIA_EMAIL)}`;
-
-    const res = await axios.get(apiUrl);
-    const result = res.data;
-
-    if (!result.success || !result.data?.qrImageUrl || !result.data?.transactionId) {
-      return ctx.reply('❌ *Gagal membuat QR Saweria.*', { parse_mode: 'Markdown' });
-    }
-
-    const { qrImageUrl, transactionId, checkPaymentUrl, timestamp } = result.data;
-
-    // Ambil bonus dari DB
-    let bonus = 0;
-    let bonus_percent = 0;
-
-    await new Promise((resolve) => {
-      db.get('SELECT * FROM bonus_config WHERE id = 1', (err, config) => {
-        if (!err && config && config.enabled && amountInt >= config.min_topup) {
-          bonus_percent = config.bonus_percent;
-          bonus = Math.floor(amountInt * bonus_percent / 100);
-        }
-        resolve(); // lanjut proses meskipun gagal ambil bonus
-      });
-    });
-
-    // Simpan ke global
-    if (!global.pendingDepositsSaweria) global.pendingDepositsSaweria = {};
-    global.pendingDepositsSaweria[transactionId] = {
-      userId: ctx.from.id,
-      username: ctx.from.username ? `@${ctx.from.username}` : 'Tidak tersedia',
-      amount: amountInt,
-      bonus,
-      bonus_percent,
-      created_at: Date.now(),
-      checked: false
-    };
-
-    const qrMessage = await ctx.replyWithPhoto(qrImageUrl, {
-      caption: `❇️ *Informasi Deposit Anda* ❇️
-
-🏷️ *» Kode Transaksi:* \`${transactionId}\`
-🏷️ *» Jumlah:* Rp${amountInt.toLocaleString('id-ID')}
-🏷️ *» Waktu:* ${timestamp}
-
-🏷️ *» Silahkan scan QR berikut untuk membayar melalui QRIS.*
-🏷️ *» Expired:* 5 menit dari sekarang`,
-      parse_mode: 'Markdown',
-    });
-
-    // Simpan ID pesan
-    global.pendingDepositsSaweria[transactionId].qrMessageId = qrMessage.message_id;
-
-  } catch (err) {
-    logger.error('❌ Gagal proses QRIS Saweria:', err.stack || err);
-    await ctx.reply('❌ *Gagal membuat QRIS Saweria.* Silahkan coba lagi nanti.', { parse_mode: 'Markdown' });
-  }
-}
-
-setInterval(async () => {
-  try {
-    const pending = global.pendingDepositsSaweria || {};
-    const transactions = Object.entries(pending);
-
-    if (transactions.length === 0) return;
-
-    for (const [idtrx, dep] of transactions) {
-      if (dep.checked) continue;
-
-      const depositAge = Date.now() - dep.created_at;
-
-      // ⏳ Jika sudah lebih dari 5 menit = expired
-      if (depositAge > 5 * 60 * 1000) {
-        try {
-          if (dep.qrMessageId) {
-            await bot.telegram.deleteMessage(dep.userId, dep.qrMessageId).catch(e =>
-              logger.warn(`Gagal hapus pesan QR expired untuk user ${dep.userId}: ${e.message}`)
-            );
-          }
-
-          await bot.telegram.sendMessage(dep.userId,
-            '❌ *Pembayaran Saweria Expired*\n\nWaktu pembayaran telah habis. Silahkan klik Top Up lagi untuk mendapatkan QR baru.',
-            { parse_mode: 'Markdown' }
-          );
-
-          logger.info(`Transaksi Saweria ${idtrx} expired untuk user ${dep.userId}`);
-        } catch (error) {
-          logger.error(`Error saat menangani expired ${idtrx}: ${error.message}`);
-        } finally {
-          delete global.pendingDepositsSaweria[idtrx];
-        }
-        continue;
-      }
-
-      // ✅ Cek status pembayaran
-      try {
-        const res = await axios.get(`https://saweria.autsc.my.id/check-payment?idtransaksi=${idtrx}`);
-        const data = res.data;
-
-        logger.info(`Respons Saweria check-payment untuk ${idtrx}: ${JSON.stringify(data)}`);
-
-        if (data?.success && data.data?.isPaid) {
-          dep.checked = true;
-
-          await updateUserBalance(dep.userId, dep.amount);
-          logger.info(`SAWERIA QRIS SUKSES user ${dep.userId} nominal Rp${dep.amount}. Saldo diupdate.`);
-
-          await prosesBonusTopUp(dep.userId, dep.username, dep.amount); // ✅ tunggu bonus masuk
-          logTopup(dep.userId, dep.username, dep.amount, 'Saweria');
-
-          const saldoTerbaru = await getUserSaldo(dep.userId);
-
-          const depositData = {
-            amount: dep.amount,
-            originalAmount: dep.amount,
-            bonus: dep.bonus || 0,
-            bonus_percent: dep.bonus_percent || 0,
-            qrMessageId: dep.qrMessageId
-          };
-
-          const success = await sendPaymentSuccessNotificationByUserId(
-            dep.userId,
-            depositData,
-            saldoTerbaru,
-            dep.username
-          );
-
-          if (success && dep.qrMessageId) {
-            await bot.telegram.deleteMessage(dep.userId, dep.qrMessageId).catch(e =>
-              logger.warn(`Gagal hapus pesan QR berhasil untuk user ${dep.userId}: ${e.message}`)
-            );
-          }
-
-          delete global.pendingDepositsSaweria[idtrx];
-        }
-
-      } catch (e) {
-        logger.error(`Cek pembayaran Saweria error untuk ${idtrx}: ${e.message}`);
-      }
-    }
-  } catch (err) {
-    logger.error("❌ ERROR FATAL di polling Saweria:", err);
-  }
-}, 10000);
 
 bot.command('addserver', async (ctx) => {
   const userId = ctx.message.from.id;
@@ -1921,7 +1717,7 @@ async function startSelectServer(ctx, action, type, page = 0) {
         return `🌐 *${server.nama_server}*\n` +
                `💰 Harga per hari: Rp${hargaPerHariTampilan}\n` + // Menggunakan harga yang disesuaikan
                `?? Harga per 30 hari: Rp${hargaPer30HariTampilan}\n` + // Menggunakan harga yang disesuaikan
-               `📊 Quota: ${server.quota}GB\n` +
+               `?? Quota: ${server.quota}GB\n` +
                `🔢 Limit IP: ${server.iplimit} IP\n` +
                (isFull ? `⚠️ *Server Penuh*` : `👥 Total Create Akun: ${server.total_create_akun}/${server.batas_create_akun}`);
       }).join('\n\n');
@@ -3977,73 +3773,6 @@ bot.action('topup_saldo', async (ctx) => {
     }
   }
 });
-// =========== TOPUP QRIS SAWERIA ===========
-bot.action('topup_saweria', async (ctx) => {
-  const userId = ctx.from.id;
-  const chatId = ctx.chat.id;
-
-  try {
-    await ctx.answerCbQuery();
-    logger.info(`🔍 User ${userId} memulai proses top-up saldo.`);
-
-    if (lastMenus[userId]) {
-      try {
-        await bot.telegram.deleteMessage(chatId, lastMenus[userId]);
-        logger.info(`🧹 Menu lama milik ${userId} berhasil dihapus`);
-        delete lastMenus[userId];
-      } catch (e) {
-        console.warn(`⚠️ Gagal menghapus menu sebelumnya untuk ${userId}:`, e.message);
-      }
-    }
-
-    // ✅ Simpan state bahwa user diminta masukkan nominal
-    if (!global.depositState) global.depositState = {};
-    global.depositState[userId] = {
-      action: 'request_amount_saweria',
-      amount: ''
-    };
-
-    logger.info(`📝 Menunggu input nominal dari user ${userId}`);
-
-    // Kirim instruksi ke user
-    const sent = await ctx.reply(
-      '💰 *Silahkan ketik nominal top-up yang ingin Anda bayarkan melalui QRIS Saweria.*\n\nContoh: `1000`',
-      { parse_mode: 'Markdown' }
-    );
-
-    // Simpan ID pesan agar bisa dihapus nantinya
-    if (sent && sent.message_id) {
-      lastMenus[userId] = sent.message_id;
-    }
-
-  } catch (error) {
-    logger.error('❌ Kesalahan saat memulai proses top-up Saweria:', error);
-    try {
-      await ctx.reply(
-        '❌ *GAGAL!* Terjadi kesalahan saat memproses top-up Saweria Anda. Silahkan coba lagi nanti.',
-        { parse_mode: 'Markdown' }
-      );
-    } catch (e) {
-      logger.error('Gagal kirim pesan error:', e.message);
-    }
-  }
-});
-
-
-bot.action(/^saweria_nominal_(\d+)$/, async (ctx) => {
-  const userId = ctx.from.id;
-  const amount = parseInt(ctx.match[1]);
-
-  delete global.depositState[userId];
-
-  await ctx.answerCbQuery();
-  await ctx.reply(`🔄 Memproses QRIS Saweria untuk Rp${amount}...`);
-
-  await processDepositSaweria(ctx, amount);
-});
-
-
-
 
 bot.action('bonus_topup_setting', async (ctx) => {
     await ctx.answerCbQuery();
