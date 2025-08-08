@@ -543,8 +543,8 @@ async function sendMainMenu(ctx) {
 ✅ Pembayaran otomatis aktif  
 ✅ Bisa jadi reseller & cuan tiap hari!
 <blockquote>
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 📊 <b>Statistik Kamu</b>
-━━━━━━━━━━━━━━━━━━━━━━
 • Hari ini         : <b>${userToday}</b> akun  
 • Minggu ini   : <b>${userWeek}</b> akun  
 • Bulan ini      : <b>${userMonth}</b> akun  
@@ -552,23 +552,24 @@ async function sendMainMenu(ctx) {
 🌐 <b>Statistik Global</b>
 • Hari ini         : <b>${globalToday}</b> akun  
 • Minggu ini   : <b>${globalWeek}</b> akun  
-• Bulan ini      : <b>${globalMonth}</b> akun 
-━━━━━━━━━━━━━━━━━━━━━━ 
-</blockquote>${statusText}
+• Bulan ini      : <b>${globalMonth}</b> akun  
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+${statusText}
 🧑‍💻 <b>User:</b> ${userName}  
 🆔 <b>ID Kamu:</b> <code>${userId}</code>  
 🥇 <b>Support Wildcard</b>  
-💳 <b>Saldo:</b> <code>Rp${saldo.toLocaleString('id-ID')}</code>  
+💳 <b>Saldo Kamu:</b> <code>Rp${saldo.toLocaleString('id-ID')}</code>  
 📡 <b>Total Server:</b> <code>${jumlahServer}</code>  
 👥 <b>Total Pengguna:</b> <code>${jumlahPengguna}</code>  
 ♻️ <b>Bot Aktif:</b> <code>${uptimeFormatted}</code>
-<blockquote>
+
 💼 <b>Ingin Penghasilan Tambahan?</b>  
 ❇️ Gabung jadi <b>Reseller</b> hanya <b>Rp 5.000</b>  
 ✅ Dapat harga lebih murah  
 ✅ Untung tiap transaksi!
 
 📞 <b>Hubungi Admin:</b> <a href="https://t.me/JesVpnt">Klik di sini</a>
+ ━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 </blockquote>`;
   const keyboard = [];
   if (bolehLihatTrial) {
@@ -1663,7 +1664,7 @@ async function startSelectServer(ctx, action, type, page = 0) {
         return ctx.reply('⚠️ *PERHATIAN!* Tidak ada server yang tersedia saat ini. Coba lagi nanti!', { parse_mode: 'Markdown' });
       }
 
-      const serversPerPage = 6;
+      const serversPerPage = 2;
       const totalPages = Math.ceil(servers.length / serversPerPage);
       const currentPage = Math.min(Math.max(page, 0), totalPages - 1);
       const start = currentPage * serversPerPage;
@@ -1706,38 +1707,55 @@ async function startSelectServer(ctx, action, type, page = 0) {
       keyboard.push([{ text: '🔙 Kembali ke Menu Utama', callback_data: 'send_main_menu' }]);
 
       const serverList = currentServers.map(server => {
-        let hargaPerHariTampilan = server.harga;
-        // Terapkan diskon untuk tampilan jika user adalah reseller
-        if (userRole === 'reseller' && resellerDiscount > 0) {
-            hargaPerHariTampilan = Math.floor(server.harga * (100 - resellerDiscount) / 100);
-        }
+  let hargaPerHariTampilan = server.harga;
 
-        const hargaPer30HariTampilan = hargaPerHariTampilan * 30;
-        const isFull = server.total_create_akun >= server.batas_create_akun;
-        return `🌐 *${server.nama_server}*\n` +
-               `💰 Harga per hari: Rp${hargaPerHariTampilan}\n` + // Menggunakan harga yang disesuaikan
-               `?? Harga per 30 hari: Rp${hargaPer30HariTampilan}\n` + // Menggunakan harga yang disesuaikan
-               `?? Quota: ${server.quota}GB\n` +
-               `🔢 Limit IP: ${server.iplimit} IP\n` +
-               (isFull ? `⚠️ *Server Penuh*` : `👥 Total Create Akun: ${server.total_create_akun}/${server.batas_create_akun}`);
-      }).join('\n\n');
+  // Terapkan diskon untuk reseller
+  if (userRole === 'reseller' && resellerDiscount > 0) {
+    hargaPerHariTampilan = Math.floor(server.harga * (100 - resellerDiscount) / 100);
+  }
 
-      if (ctx.updateType === 'callback_query') {
-        ctx.editMessageText(`📋 *List Server (Halaman ${currentPage + 1} dari ${totalPages}):*\n\n${serverList}`, {
-          reply_markup: {
-            inline_keyboard: keyboard
-          },
-          parse_mode: 'Markdown'
-        });
-      } else {
-        ctx.reply(`📋 *List Server (Halaman ${currentPage + 1} dari ${totalPages}):*\n\n${serverList}`, {
-          reply_markup: {
-            inline_keyboard: keyboard
-          },
-          parse_mode: 'Markdown'
-        });
-      }
-      userState[ctx.chat.id] = { step: `${action}_username_${type}`, page: currentPage };
+  const hargaPer30HariTampilan = hargaPerHariTampilan * 30;
+  const isFull = server.total_create_akun >= server.batas_create_akun;
+
+  return (
+    "```" +
+    "━━━━━━━━━━━━━━━━━━━━━━\n" +
+    "━━━━━━━━━━━━━━━━━━━━━━\n" +
+    `🖥️ ${server.nama_server}\n` +
+    `💵 Per Hari   : Rp${hargaPerHariTampilan}\n` +
+    `📅 30 Hari    : Rp${hargaPer30HariTampilan}\n` +
+    `📦 Kuota      : ${server.quota}GB\n` +
+    `🌐 Limit IP   : ${server.iplimit} IP\n` +
+    (isFull
+      ? `🚫 Server Penuh`
+      : `👤 Total Akun : ${server.total_create_akun}/${server.batas_create_akun}`
+    ) +
+    "\n━━━━━━━━━━━━━━━━━━━━━━" +
+    "```"
+  );
+}).join("\n\n"); // gabungkan jadi string rapi
+
+// Kirim pesan
+if (ctx.updateType === 'callback_query') {
+  ctx.editMessageText(
+    `📋 *List Server (Halaman ${currentPage + 1} dari ${totalPages}):*\n\n${serverList}`,
+    {
+      reply_markup: { inline_keyboard: keyboard },
+      parse_mode: 'Markdown'
+    }
+  );
+} else {
+  ctx.reply(
+    `📋 *List Server (Halaman ${currentPage + 1} dari ${totalPages}):*\n\n${serverList}`,
+    {
+      reply_markup: { inline_keyboard: keyboard },
+      parse_mode: 'Markdown'
+    }
+  );
+}
+
+// Simpan state user
+userState[ctx.chat.id] = { step: `${action}_username_${type}`, page: currentPage };
     });
   } catch (error) {
     logger.error(`❌ Error saat memulai proses ${action} untuk ${type}:`, error);
@@ -3737,7 +3755,7 @@ bot.action('topup_saldo', async (ctx) => {
     if (lastMenus[userId]) {
       try {
         await bot.telegram.deleteMessage(chatId, lastMenus[userId]);
-        logger.info(`🧹 Menu lama milik ${userId} berhasil dihapus`);
+        logger.info(`?? Menu lama milik ${userId} berhasil dihapus`);
         delete lastMenus[userId];
       } catch (e) {
         console.warn(`⚠️ Gagal menghapus menu sebelumnya untuk ${userId}:`, e.message);
