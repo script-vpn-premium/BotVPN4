@@ -55,7 +55,7 @@ setup_bot() {
     fi
 
     # Install dependencies
-    cd /root/BotVPN
+    cd /root/BotVPN4
     npm install sqlite3 express crypto telegraf axios dotenv canvas node-fetch form-data
     npm rebuild canvas
     rm -rf node_modules
