@@ -55,7 +55,7 @@ setup_bot() {
     fi
 
     # Install dependencies
-    cd /root/BotVPN4
+    cd /root/BotVPN
     npm install sqlite3 express crypto telegraf axios dotenv canvas node-fetch form-data
     npm rebuild canvas
     rm -rf node_modules
@@ -67,13 +67,11 @@ setup_bot() {
 
 server_app() {
     clear
-    echo -e "${orange}────────────────────────────────────────────${neutral}"
-echo -e "${cyan}🎉 Selamat Datang di Bot Order VPN Otomatis 🎉${neutral}"
-echo -e "${green}🔐 Layanan VPN Premium • Cepat • Mudah • Aman${neutral}"
-echo -e "${blue}🤖 Powered by RISWAN - Bot Telegram Modifikasi${neutral}"
-echo -e "${orange}────────────────────────────────────────────${neutral}"
+    echo -e "${orange}─────────────────────────────────────────${neutral}"
+    echo -e "${green}- BOT SELLVPN TELEGRAM PGETUNNEL${neutral}"
+    echo -e "${orange}─────────────────────────────────────────${neutral}"
 
-read -p "Masukkan token bot: " token
+    read -p "Masukkan token bot: " token
     while [ -z "$token" ]; do read -p "Masukkan token bot: " token; done
 
     read -p "Masukkan admin ID: " adminid
@@ -101,7 +99,7 @@ read -p "Masukkan token bot: " token
     while [ -z "$apikey" ]; do read -p "Masukkan API KEY: " saweria_email; done
 
     # Simpan konfigurasi ke file .vars.json
-    cat >/root/BotVPN4/.vars.json <<EOF
+    cat >/root/BotVPN/.vars.json <<EOF
 {
   "BOT_TOKEN": "$token",
   "USER_ID": "$adminid",
