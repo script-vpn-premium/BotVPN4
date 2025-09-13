@@ -522,6 +522,15 @@ async function sendMainMenu(ctx) {
   }
 // --- Akhir blok kode yang ditambahkan ---
 
+// Ambil admin username
+  let adminUsername = 'Admin';
+  try {
+    const adminChat = await bot.telegram.getChat(ADMIN);
+    if (adminChat.username) adminUsername = adminChat.username;
+  } catch (e) {
+    logger.error('❌ Gagal ambil username admin:', e.message);
+  }
+
   // Uptime bot
   const uptime = os.uptime();
   const days = Math.floor(uptime / 86400);
@@ -587,7 +596,7 @@ const messageText = `
 ┃ 🌐 <b>Total Server</b> : <code>${jumlahServer}</code>  
 ┃ 👥 <b>Total User</b> : <code>${jumlahPengguna}</code>  
 ┃ ⚡ <b>Bot Aktif</b> : <code>${uptimeFormatted}</code>  
-┃ 📞 <b>Hubungi Admin</b> : <a href="https://t.me/JesVpnt">Klik di sini</a>
+┃ 📞 <b>Hubungi Admin</b> : <a href="https://t.me/${adminUsername}">Klik di sini</a>
 <b>┗━━━━━━━━━━━━━━━━━━━━━━━━━━━┛</b>`;
   const keyboard = [];
   if (bolehLihatTrial) {
