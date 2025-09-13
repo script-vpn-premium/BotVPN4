@@ -561,34 +561,36 @@ async function sendMainMenu(ctx) {
     statusText = `👤 <b>» Status:</b> <code>Member</code>`; // Mengubah emoji untuk Member
   }
 
-    // Pesan utama dengan format yang sudah padat dan rapi
-  const messageText = `
+// Pesan utama dengan format yang sudah padat dan rapi
+const messageText = `
 <b>┏━━━━━━━━━━━━━━━━━━━━━━━━━━━┓</b>
 ┃ 💎 <b>${NAMA_STORE}</b>  
-┃ 🚀 <b>Top-Up otomatis tanpa tunggu admin</b>
-<b>┗━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
-┃ <blockquote>
+┃ 🚀 <b>Top-Up otomatis tanpa tunggu admin</b>  
+<b>┗━━━━━━━━━━━━━━━━━━━━━━━━━━━┛</b>
+
+<blockquote>
 <b>┏━━━━━━━━━━━━━━━━━━━━━━┓</b>
-┃📊 <b>Statistik Kamu</b>  
+┃ 📊 <b>Statistik Kamu</b>  
 ┃ 📅 Hari ini : <b>${userToday}</b> akun  
 ┃ 📆 Minggu ini : <b>${userWeek}</b> akun  
 ┃ 🗓️ Bulan ini : <b>${userMonth}</b> akun  
 ┃
-┃🌍 <b>Statistik Global</b>  
+┃ 🌍 <b>Statistik Global</b>  
 ┃ 📅 Hari ini : <b>${globalToday}</b> akun  
 ┃ 📆 Minggu ini : <b>${globalWeek}</b> akun  
-┃ 🗓️ Bulan ini : <b>${globalMonth}</b> akun  
+┃ 🗓️ Bulan ini  : <b>${globalMonth}</b> akun  
 <b>┗━━━━━━━━━━━━━━━━━━━━━━┛</b>
 </blockquote>
+
 <b>┏━━━━━━━━━━━━━━━━━━━━━━━━━━━┓</b>
-┃ ${statusText}
-┃ 👤 <b>User</b>  : ${userName}  
-┃ 🆔 <b>ID</b> : <code>${userId}</code>  
-┃ 💳 <b>Saldo</b> : <code>Rp${saldo.toLocaleString('id-ID')}</code>  
-┃ 🌐 <b>Total Server</b>: <code>${jumlahServer}</code>  
-┃ 👥 <b>Total user</b> : <code>${jumlahPengguna}</code>  
+┃ ${statusText}  
+┃ 👤 <b>User</b> : ${userName}  
+┃ 🆔 <b>ID</b>  : <code>${userId}</code>  
+┃ 💳 <b>Saldo</b>  : <code>Rp${saldo.toLocaleString('id-ID')}</code>  
+┃ 🌐 <b>Total Server</b> : <code>${jumlahServer}</code>  
+┃ 👥 <b>Total User</b> : <code>${jumlahPengguna}</code>  
 ┃ ⚡ <b>Bot Aktif</b> : <code>${uptimeFormatted}</code>  
-┃ 📞 <b>Hubungi Admin:</b> <a href="https://t.me/JesVpnt">Klik di sini</a>  
+┃ 📞 <b>Hubungi Admin</b>: <a href="https://t.me/JesVpnt">Klik di sini</a>  
 <b>┗━━━━━━━━━━━━━━━━━━━━━━━━━━━┛</b>`;
   const keyboard = [];
   if (bolehLihatTrial) {
