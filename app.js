@@ -418,45 +418,62 @@ async function sendMainMenu(ctx) {
     }
   }
 
+  // Info user
   const userName = ctx.from.username ? `@${ctx.from.username}` : (ctx.from.first_name || 'Member');
-
-  // Ambil saldo & role
-  let saldo = 0;
-  let userRole = 'member';
+  let saldo = 0, userRole = 'member';
   try {
     const row = await new Promise((resolve, reject) => {
-      db.get('SELECT saldo, role FROM users WHERE user_id = ?', [userId], (err, row) => {
-        if (err) reject(err); else resolve(row);
-      });
+      db.get('SELECT saldo, role FROM users WHERE user_id = ?', [userId], (err, row) => err ? reject(err) : resolve(row));
     });
     saldo = row ? row.saldo : 0;
     userRole = row ? row.role : 'member';
-  } catch {
+  } catch (e) {
     saldo = 0;
     userRole = 'member';
   }
 
+  // Tanggal
   const now = new Date();
   const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate()).toISOString();
   const weekStart = new Date(now.getFullYear(), now.getMonth(), now.getDate() - now.getDay()).toISOString();
   const monthStart = new Date(now.getFullYear(), now.getMonth(), 1).toISOString();
 
   // Statistik user & global
-  const getCount = (query, params) => new Promise(resolve => {
-    db.get(query, params, (err, row) => resolve(row ? row.count : 0));
-  });
-
   let userToday = 0, userWeek = 0, userMonth = 0;
   let globalToday = 0, globalWeek = 0, globalMonth = 0;
 
   try {
-    userToday = await getCount('SELECT COUNT(*) as count FROM log_penjualan WHERE user_id = ? AND waktu_transaksi >= ? AND action_type IN ("create","renew")', [userId, todayStart]);
-    userWeek = await getCount('SELECT COUNT(*) as count FROM log_penjualan WHERE user_id = ? AND waktu_transaksi >= ? AND action_type IN ("create","renew")', [userId, weekStart]);
-    userMonth = await getCount('SELECT COUNT(*) as count FROM log_penjualan WHERE user_id = ? AND waktu_transaksi >= ? AND action_type IN ("create","renew")', [userId, monthStart]);
+    userToday = await new Promise((resolve) => db.get(
+      'SELECT COUNT(*) as count FROM log_penjualan WHERE user_id = ? AND waktu_transaksi >= ? AND action_type IN ("create","renew")',
+      [userId, todayStart],
+      (err, row) => resolve(row ? row.count : 0)
+    ));
+    userWeek = await new Promise((resolve) => db.get(
+      'SELECT COUNT(*) as count FROM log_penjualan WHERE user_id = ? AND waktu_transaksi >= ? AND action_type IN ("create","renew")',
+      [userId, weekStart],
+      (err, row) => resolve(row ? row.count : 0)
+    ));
+    userMonth = await new Promise((resolve) => db.get(
+      'SELECT COUNT(*) as count FROM log_penjualan WHERE user_id = ? AND waktu_transaksi >= ? AND action_type IN ("create","renew")',
+      [userId, monthStart],
+      (err, row) => resolve(row ? row.count : 0)
+    ));
 
-    globalToday = await getCount('SELECT COUNT(*) as count FROM log_penjualan WHERE waktu_transaksi >= ? AND action_type IN ("create","renew")', [todayStart]);
-    globalWeek = await getCount('SELECT COUNT(*) as count FROM log_penjualan WHERE waktu_transaksi >= ? AND action_type IN ("create","renew")', [weekStart]);
-    globalMonth = await getCount('SELECT COUNT(*) as count FROM log_penjualan WHERE waktu_transaksi >= ? AND action_type IN ("create","renew")', [monthStart]);
+    globalToday = await new Promise((resolve) => db.get(
+      'SELECT COUNT(*) as count FROM log_penjualan WHERE waktu_transaksi >= ? AND action_type IN ("create","renew")',
+      [todayStart],
+      (err, row) => resolve(row ? row.count : 0)
+    ));
+    globalWeek = await new Promise((resolve) => db.get(
+      'SELECT COUNT(*) as count FROM log_penjualan WHERE waktu_transaksi >= ? AND action_type IN ("create","renew")',
+      [weekStart],
+      (err, row) => resolve(row ? row.count : 0)
+    ));
+    globalMonth = await new Promise((resolve) => db.get(
+      'SELECT COUNT(*) as count FROM log_penjualan WHERE waktu_transaksi >= ? AND action_type IN ("create","renew")',
+      [monthStart],
+      (err, row) => resolve(row ? row.count : 0)
+    ));
   } catch (e) {
     logger.error('Error fetching statistics:', e.message);
   }
@@ -464,78 +481,105 @@ async function sendMainMenu(ctx) {
   // Jumlah user
   let jumlahPengguna = 0;
   try {
-    const row = await new Promise((resolve, reject) => {
-      db.get('SELECT COUNT(*) AS count FROM users', (err, row) => err ? reject(err) : resolve(row));
-    });
+    const row = await new Promise((resolve, reject) => db.get('SELECT COUNT(*) AS count FROM users', (err, row) => err ? reject(err) : resolve(row)));
     jumlahPengguna = row.count;
-  } catch { jumlahPengguna = 0; }
+  } catch (e) { jumlahPengguna = 0; }
 
-  // Jumlah server
-  let jumlahServer = 0;
-  try {
-    jumlahServer = await new Promise((resolve, reject) => {
-      db.get('SELECT COUNT(*) AS count FROM Server', (err, row) => err ? reject(err) : resolve(row.count));
-    });
-  } catch (e) { logger.error('Gagal ambil data jumlah server:', e.message); }
+  // Tombol trial / sewa script
+  const tombolTrialAktif = await new Promise((resolve) => db.get('SELECT show_trial_button FROM ui_config WHERE id = 1', (err, row) => resolve(!err && row?.show_trial_button === 1)));
+  const tombolSewaScriptAktif = await new Promise((resolve) => db.get('SELECT show_sewa_script_button FROM ui_config WHERE id = 1', (err, row) => resolve(!err && row?.show_sewa_script_button === 1)));
+  const isUnlimited = await new Promise((resolve) => db.get('SELECT * FROM unlimited_trial_users WHERE user_id = ?', [userId], (err, row) => resolve(row != null)));
+  const isAdmin = adminIds.includes(userId);
+  const bolehLihatTrial = tombolTrialAktif || isUnlimited || isAdmin;
 
-  // Uptime bot
-  const uptime = os.uptime();
-  const uptimeFormatted = `${Math.floor(uptime/86400)}d ${Math.floor((uptime%86400)/3600)}h ${Math.floor((uptime%3600)/60)}m ${Math.floor(uptime%60)}s`;
-
-  // Top-up terakhir
-  let topUpText = '';
-  if (topUpTerakhir) {
-    topUpText = `║💰 <b>User Baru Top-Up</b>\n║➡️  ${topUpTerakhir.userName}\n║💵 Rp${topUpTerakhir.amount.toLocaleString('id-ID')}`;
-  }
-
-  // Status role
-  let statusText = adminIds.includes(userId)
-    ? `👑 <b>Role :</b> <code>Admin</code>`
-    : (userRole === 'Reseller'
-        ? `🏆 <b>Role :</b> <code>Reseller</code>`
-        : `👤 <b>Role :</b> <code>Member</code>`);
-
-  // Username admin
+  // Ambil admin username
   let adminUsername = 'Admin';
   try {
     const adminChat = await bot.telegram.getChat(ADMIN);
     if (adminChat.username) adminUsername = adminChat.username;
-  } catch (e) { logger.error('❌ Gagal ambil username admin:', e.message); }
+  } catch (e) {
+    logger.error('❌ Gagal ambil username admin:', e.message);
+  }
 
-  // Pesan utama modern & stylish
+  // Uptime bot
+  const uptime = os.uptime();
+  const days = Math.floor(uptime / 86400);
+  const hours = Math.floor((uptime % 86400) / 3600);
+  const minutes = Math.floor((uptime % 3600) / 60);
+  const seconds = Math.floor(uptime % 60);
+  const uptimeFormatted = `${days}d ${hours}h ${minutes}m ${seconds}s`;
+
+  // Jumlah server
+  let jumlahServer = 0;
+  try {
+    jumlahServer = await new Promise((resolve, reject) => db.get('SELECT COUNT(*) AS count FROM Server', (err, row) => err ? reject(err) : resolve(row.count)));
+  } catch (e) { logger.error('Gagal ambil jumlah server:', e.message); }
+
+  // Status role
+  let statusText = isAdmin ? `👑 <b>Role :</b> <code>Admin</code>` :
+                   userRole === 'reseller' ? `🏆 <b>Role :</b> <code>Reseller</code>` :
+                   `👤 <b>Role :</b> <code>Member</code>`;
+
+  // Ambil top-up terbaru untuk semua role
+  let topUpTerakhir = null;
+  try {
+    topUpTerakhir = await new Promise((resolve, reject) => {
+      db.get(
+        `SELECT u.username, u.role, t.amount 
+         FROM log_topup t 
+         JOIN users u ON t.user_id = u.user_id 
+         ORDER BY t.waktu_transaksi DESC 
+         LIMIT 1`,
+        (err, row) => err ? reject(err) : resolve(row)
+      );
+    });
+  } catch (e) {
+    logger.error('Gagal ambil top-up terakhir:', e.message);
+  }
+
+  let topUpText = '';
+  if (topUpTerakhir) {
+    const userTopupName = topUpTerakhir.username ? `@${topUpTerakhir.username}` : 'Member';
+    const userTopupRole = topUpTerakhir.role === 'reseller' ? 'Reseller' :
+                          topUpTerakhir.role === 'admin' ? 'Admin' : 'Member';
+    topUpText = `
+<b>┏━━━━━━━━━━━━━━━━━━━━━━━━━━━┓</b>
+┃ 💰 <b>User Baru Saja Top-Up</b>
+┃ ➡️ ${userTopupName}  (${userTopupRole})
+┃ 💵 Rp${topUpTerakhir.amount.toLocaleString('id-ID')}
+<b>┗━━━━━━━━━━━━━━━━━━━━━━━━━━━┛</b>`;
+  }
+
+  // Pesan utama
   const messageText = `
-╔═════════════════════╗
-║ 💎 <b>${NAMA_STORE}</b>
-║ 🚀 Top-Up otomatis tanpa tunggu admin
-╚═════════════════════╝
-
-╔═════════════════════╗
-║ 📊 <b>Statistik Kamu</b>
-║ ───────────────────
-║ 📅 Hari ini   : <b>${userToday}</b>
-║ 📆 Minggu ini : <b>${userWeek}</b>
-║ 🗓️ Bulan ini  : <b>${userMonth}</b>
-║
-║ 🌍 <b>Statistik Global</b>
-║ ───────────────────
-║ 📅 Hari ini   : <b>${globalToday}</b>
-║ 📆 Minggu ini : <b>${globalWeek}</b>
-║ 🗓️ Bulan ini  : <b>${globalMonth}</b>
-╚═════════════════════╝
-
-${topUpText ? '╔═════════════════════╗\n' + topUpText + '\n╚═════════════════════╝' : ''}
-
-╔═════════════════════╗
-║ ${statusText}
-║ 👤 <b>User :</b> ${userName}
-║ 🆔 <b>ID User :</b> <code>${userId}</code>
-║ 💳 <b>Total Saldo :</b> Rp${saldo.toLocaleString('id-ID')}
-║ 🌐 <b>Total Server :</b> ${jumlahServer}
-║ 👥 <b>Total User :</b> ${jumlahPengguna}
-║ ⚡ <b>Bot Aktif :</b> ${uptimeFormatted}
-║ 📞 <b>Hubungi Admin :</b> <a href="https://t.me/${adminUsername}">Klik di sini</a>
-╚═════════════════════╝
-`;
+${topUpText}
+<b>┏━━━━━━━━━━━━━━━━━━━━━━━━━━━┓</b>
+┃ 💎 <b>${NAMA_STORE}</b>  
+┃ 🚀 <b>Top-Up otomatis tanpa tunggu admin</b>  
+<b>┗━━━━━━━━━━━━━━━━━━━━━━━━━━━┛</b>
+<blockquote>
+<b>┏━━━━━━━━━━━━━━━━━━┓</b>
+┃ 📊 <b>Statistik Kamu</b>  
+┃ 📅 Hari ini : <b>${userToday}</b> akun  
+┃ 📆 Minggu ini : <b>${userWeek}</b> akun  
+┃ 🗓️ Bulan ini : <b>${userMonth}</b> akun  
+┃
+┃ 🌍 <b>Statistik Global</b>  
+┃ 📅 Hari ini : <b>${globalToday}</b> akun  
+┃ 📆 Minggu ini : <b>${globalWeek}</b> akun  
+┃ 🗓️ Bulan ini : <b>${globalMonth}</b> akun  
+<b>┗━━━━━━━━━━━━━━━━━━┛</b>
+</blockquote>
+<b>┏━━━━━━━━━━━━━━━━━━━━━━━━━━━┓</b>
+┃ ${statusText}  
+┃ 👤 <b>User</b> : ${userName}  
+┃ 🆔 <b>ID User</b>  : <code>${userId}</code>  
+┃ 💳 <b>Total Saldo</b>  : <code>Rp${saldo.toLocaleString('id-ID')}</code> 
+┃ 🌐 <b>Total Server</b> : <code>${jumlahServer}</code>  
+┃ 👥 <b>Total User</b> : <code>${jumlahPengguna}</code>  
+┃ ⚡ <b>Bot Aktif</b> : <code>${uptimeFormatted}</code>  
+┃ 📞 <b>Hubungi Admin</b> : <a href="https://t.me/${adminUsername}">Klik di sini</a>
+<b>┗━━━━━━━━━━━━━━━━━━━━━━━━━━━┛</b>`;
   const keyboard = [];
   if (bolehLihatTrial) {
   keyboard.push([
@@ -4613,7 +4657,7 @@ async function handleEditHarga(ctx, userStateData, data) {
   }
 
   userStateData.amount = currentAmount;
-  const newMessage = `?? *Silahkan masukkan harga server baru:*\n\nJumlah saat ini: *Rp ${currentAmount}*`;
+  const newMessage = `💰 *Silahkan masukkan harga server baru:*\n\nJumlah saat ini: *Rp ${currentAmount}*`;
   if (newMessage !== ctx.callbackQuery.message.text) {
     await ctx.editMessageText(newMessage, {
       reply_markup: { inline_keyboard: keyboard_nomor() },
