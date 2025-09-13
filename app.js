@@ -568,7 +568,7 @@ const messageText = `
 ┃ 🚀 <b>Top-Up otomatis tanpa tunggu admin</b>  
 <b>┗━━━━━━━━━━━━━━━━━━━━━━━━━━━┛</b>
 <blockquote>
-<b>┏━━━━━━━━━━━━━━━━━━━━━━┓</b>
+<b>┏━━━━━━━━━━━━━━━━━━┓</b>
 ┃ 📊 <b>Statistik Kamu</b>  
 ┃ 📅 Hari ini : <b>${userToday}</b> akun  
 ┃ 📆 Minggu ini : <b>${userWeek}</b> akun  
@@ -578,7 +578,7 @@ const messageText = `
 ┃ 📅 Hari ini : <b>${globalToday}</b> akun  
 ┃ 📆 Minggu ini : <b>${globalWeek}</b> akun  
 ┃ 🗓️ Bulan ini  : <b>${globalMonth}</b> akun  
-<b>┗━━━━━━━━━━━━━━━━━━━━━━┛</b>
+<b>┗━━━━━━━━━━━━━━━━━━┛</b>
 </blockquote>
 <b>┏━━━━━━━━━━━━━━━━━━━━━━━━━━━┓</b>
 ┃ ${statusText}  
