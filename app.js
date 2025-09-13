@@ -520,7 +520,7 @@ async function sendMainMenu(ctx) {
                    userRole === 'reseller' ? `🏆 <b>Role :</b> <code>Reseller</code>` :
                    `👤 <b>Role :</b> <code>Member</code>`;
 
-  // Ambil top-up terbaru untuk semua role
+  // Ambil top-up terbaru
   let topUpTerakhir = null;
   try {
     topUpTerakhir = await new Promise((resolve, reject) => {
@@ -537,22 +537,18 @@ async function sendMainMenu(ctx) {
     logger.error('Gagal ambil top-up terakhir:', e.message);
   }
 
+  // Format top-up terbaru
   let topUpText = '';
   if (topUpTerakhir) {
     const userTopupName = topUpTerakhir.username ? `@${topUpTerakhir.username}` : 'Member';
     const userTopupRole = topUpTerakhir.role === 'reseller' ? 'Reseller' :
                           topUpTerakhir.role === 'admin' ? 'Admin' : 'Member';
-    topUpText = `
-<b>┏━━━━━━━━━━━━━━━━━━━━━━━━━━━┓</b>
-┃ 💰 <b>User Baru Saja Top-Up</b>
-┃ ➡️ ${userTopupName}  (${userTopupRole})
-┃ 💵 Rp${topUpTerakhir.amount.toLocaleString('id-ID')}
-<b>┗━━━━━━━━━━━━━━━━━━━━━━━━━━━┛</b>`;
+    const amount = topUpTerakhir.amount || 0;
+    topUpText = `║💰 <b>User Baru Saja Top-Up</b>\n║➡️ ${userTopupName} (${userTopupRole})\n║💵 Rp${amount.toLocaleString('id-ID')}\n\n`;
   }
 
   // Pesan utama
   const messageText = `
-${topUpText}
 <b>┏━━━━━━━━━━━━━━━━━━━━━━━━━━━┓</b>
 ┃ 💎 <b>${NAMA_STORE}</b>  
 ┃ 🚀 <b>Top-Up otomatis tanpa tunggu admin</b>  
@@ -569,7 +565,9 @@ ${topUpText}
 ┃ 📆 Minggu ini : <b>${globalWeek}</b> akun  
 ┃ 🗓️ Bulan ini : <b>${globalMonth}</b> akun  
 <b>┗━━━━━━━━━━━━━━━━━━┛</b>
-</blockquote>
+</blockquote><b>┏━━━━━━━━━━━━━━━━━━━━━━━━━━━┓</b>
+${topUpText}<b>
+<b>┗━━━━━━━━━━━━━━━━━━━━━━━━━━━┛</b>
 <b>┏━━━━━━━━━━━━━━━━━━━━━━━━━━━┓</b>
 ┃ ${statusText}  
 ┃ 👤 <b>User</b> : ${userName}  
