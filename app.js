@@ -587,7 +587,8 @@ const messageText = `
 ┃ 🌐 <b>Total Server</b> : <code>${jumlahServer}</code>  
 ┃ 👥 <b>Total User</b> : <code>${jumlahPengguna}</code>  
 ┃ ⚡ <b>Bot Aktif</b> : <code>${uptimeFormatted}</code>  
-┃ 📞 <b>Hubungi Admin</b> : <a href="https://t.me/JesVpnt">Klik di sini</a><b>┗━━━━━━━━━━━━━━━━━━━━━━━━━━━┛</b>`;
+┃ 📞 <b>Hubungi Admin</b> : <a href="https://t.me/JesVpnt">Klik di sini</a>
+<b>┗━━━━━━━━━━━━━━━━━━━━━━━━━━━┛</b>`;
   const keyboard = [];
   if (bolehLihatTrial) {
   keyboard.push([
