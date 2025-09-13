@@ -407,122 +407,100 @@ async function sendMainMenu(ctx) {
   const userId = ctx.from.id;
   const chatId = ctx.chat.id;
 
+  // Hapus menu lama jika ada
   if (lastMenus[userId]) {
     try {
       await ctx.telegram.deleteMessage(chatId, lastMenus[userId]);
       logger.info(`🧹 Menu lama milik ${userId} dihapus oleh sendMainMenu`);
       delete lastMenus[userId]; 
     } catch (e) {
-
-      console.warn(`⚠️ Gagal hapus menu lama user ${userId} di sendMainMenu:`, e.message);
+      console.warn(`⚠️ Gagal hapus menu lama user ${userId}:`, e.message);
     }
   }
-  
+
+  // Nama user
   const userName = ctx.from.username ? `@${ctx.from.username}` : (ctx.from.first_name || 'Member');
+
+  // Ambil saldo dan role
   let saldo = 0;
   let userRole = 'member';
   try {
     const row = await new Promise((resolve, reject) => {
-      db.get('SELECT saldo, role FROM users WHERE user_id = ?', [userId], (err, row) => { // Mengambil saldo dan role
+      db.get('SELECT saldo, role FROM users WHERE user_id = ?', [userId], (err, row) => {
         if (err) reject(err); else resolve(row);
       });
     });
     saldo = row ? row.saldo : 0;
-    userRole = row ? row.role : 'member'; 
+    userRole = row ? row.role : 'member';
   } catch (e) {
     saldo = 0;
     userRole = 'member';
   }
 
+  // Format tanggal SQLite
+  function formatDateSQLite(date) {
+    return date.toISOString().replace('T', ' ').split('.')[0];
+  }
   const now = new Date();
-  const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate()).toISOString();
-  const weekStart = new Date(now.getFullYear(), now.getMonth(), now.getDate() - now.getDay()).toISOString();
-  const monthStart = new Date(now.getFullYear(), now.getMonth(), 1).toISOString();
+  const todayStart = formatDateSQLite(new Date(now.getFullYear(), now.getMonth(), now.getDate()));
+  const weekStart = formatDateSQLite(new Date(now.getFullYear(), now.getMonth(), now.getDate() - now.getDay()));
+  const monthStart = formatDateSQLite(new Date(now.getFullYear(), now.getMonth(), 1));
 
+  // Statistik user
   let userToday = 0, userWeek = 0, userMonth = 0;
   let globalToday = 0, globalWeek = 0, globalMonth = 0;
-
   try {
-    // Statistik Anda
-    userToday = await new Promise((resolve) => {
+    userToday = await new Promise(resolve => {
       db.get('SELECT COUNT(*) as count FROM log_penjualan WHERE user_id = ? AND waktu_transaksi >= ? AND action_type IN ("create","renew")', [userId, todayStart], (err, row) => resolve(row ? row.count : 0));
     });
-    userWeek = await new Promise((resolve) => {
+    userWeek = await new Promise(resolve => {
       db.get('SELECT COUNT(*) as count FROM log_penjualan WHERE user_id = ? AND waktu_transaksi >= ? AND action_type IN ("create","renew")', [userId, weekStart], (err, row) => resolve(row ? row.count : 0));
     });
-    userMonth = await new Promise((resolve) => {
+    userMonth = await new Promise(resolve => {
       db.get('SELECT COUNT(*) as count FROM log_penjualan WHERE user_id = ? AND waktu_transaksi >= ? AND action_type IN ("create","renew")', [userId, monthStart], (err, row) => resolve(row ? row.count : 0));
     });
 
-    // Statistik Global
-    globalToday = await new Promise((resolve) => {
+    globalToday = await new Promise(resolve => {
       db.get('SELECT COUNT(*) as count FROM log_penjualan WHERE waktu_transaksi >= ? AND action_type IN ("create","renew")', [todayStart], (err, row) => resolve(row ? row.count : 0));
     });
-    globalWeek = await new Promise((resolve) => {
+    globalWeek = await new Promise(resolve => {
       db.get('SELECT COUNT(*) as count FROM log_penjualan WHERE waktu_transaksi >= ? AND action_type IN ("create","renew")', [weekStart], (err, row) => resolve(row ? row.count : 0));
     });
-    globalMonth = await new Promise((resolve) => {
+    globalMonth = await new Promise(resolve => {
       db.get('SELECT COUNT(*) as count FROM log_penjualan WHERE waktu_transaksi >= ? AND action_type IN ("create","renew")', [monthStart], (err, row) => resolve(row ? row.count : 0));
     });
   } catch (e) {
     logger.error('Error fetching statistics:', e.message);
   }
 
-  // Jumlah pengguna bot
+  // Total pengguna
   let jumlahPengguna = 0;
   try {
     const row = await new Promise((resolve, reject) => {
-      db.get('SELECT COUNT(*) AS count FROM users', (err, row) => { if (err) reject(err); else resolve(row); });
+      db.get('SELECT COUNT(*) AS count FROM users', (err, row) => err ? reject(err) : resolve(row));
     });
     jumlahPengguna = row.count;
   } catch (e) { jumlahPengguna = 0; }
 
-  // Latency (dummy, bisa diubah sesuai kebutuhan)
+  // Latency dummy
   const latency = (Math.random() * 0.1 + 0.01).toFixed(2);
 
-  // Ambil status tombol trial dari database
-  const tombolTrialAktif = await new Promise((resolve) => {
-    db.get('SELECT show_trial_button FROM ui_config WHERE id = 1', (err, row) => {
-      if (err) return resolve(false);
-      resolve(row?.show_trial_button === 1);
-    });
+  // Tombol trial/sewa script
+  const tombolTrialAktif = await new Promise(resolve => {
+    db.get('SELECT show_trial_button FROM ui_config WHERE id = 1', (err, row) => resolve(row?.show_trial_button === 1));
   });
-  
-  const tombolSewaScriptAktif = await new Promise((resolve) => {
-    db.get('SELECT show_sewa_script_button FROM ui_config WHERE id = 1', (err, row) => {
-      if (err) {
-        return resolve(false);
-      }
-      resolve(row?.show_sewa_script_button === 1);
-    });
+  const tombolSewaScriptAktif = await new Promise(resolve => {
+    db.get('SELECT show_sewa_script_button FROM ui_config WHERE id = 1', (err, row) => resolve(row?.show_sewa_script_button === 1));
   });
 
-  const isUnlimited = await new Promise((resolve) => {
-    db.get('SELECT * FROM unlimited_trial_users WHERE user_id = ?', [userId], (err, row) => {
-      if (err) return resolve(false);
-      resolve(row != null);
-    });
+  const isUnlimited = await new Promise(resolve => {
+    db.get('SELECT * FROM unlimited_trial_users WHERE user_id = ?', [userId], (err, row) => resolve(row != null));
   });
 
   const isAdmin = adminIds.includes(userId);
   const bolehLihatTrial = tombolTrialAktif || isUnlimited || isAdmin;
-  
-  // --- Letakkan blok kode yang Anda tambahkan di sini ---
-  let adminUsername = 'Admin'; // Nilai default jika gagal mengambil username
-  try {
-  // Gunakan ID admin untuk mendapatkan profil chat
-  const adminChat = await bot.telegram.getChat(ADMIN);
-  // Periksa apakah username ada, lalu simpan nilainya
-    if (adminChat.username) {
-      adminUsername = adminChat.username;
-    }
-  } catch (e) {
-  // Catat error jika gagal
-    logger.error('❌ Gagal mengambil username admin:', e.message);
-  }
-// --- Akhir blok kode yang ditambahkan ---
 
-// Ambil admin username
+  // Ambil username admin
   let adminUsername = 'Admin';
   try {
     const adminChat = await bot.telegram.getChat(ADMIN);
@@ -539,56 +517,52 @@ async function sendMainMenu(ctx) {
   const seconds = Math.floor(uptime % 60);
   const uptimeFormatted = `${days}d ${hours}h ${minutes}m ${seconds}s`;
 
-  // Tanggal dan waktu saat ini
+  // Tanggal & waktu
   const dayNames = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
   const currentDay = dayNames[now.getDay()];
-  const currentDate = new Intl.DateTimeFormat('id-ID', {
-    day: 'numeric',
-    month: 'long',
-    year: 'numeric'
-  }).format(now);
+  const currentDate = new Intl.DateTimeFormat('id-ID', { day: 'numeric', month: 'long', year: 'numeric' }).format(now);
   const timeNow = now.toTimeString().split(' ')[0];
 
+  // Jumlah server
   let jumlahServer = 0;
   try {
     jumlahServer = await new Promise((resolve, reject) => {
-      db.get('SELECT COUNT(*) AS count FROM Server', (err, row) => {
-        if (err) reject(err); else resolve(row.count);
-      });
+      db.get('SELECT COUNT(*) AS count FROM Server', (err, row) => err ? reject(err) : resolve(row.count));
     });
   } catch (e) {
     logger.error('Gagal ambil data jumlah server:', e.message);
   }
 
-  // Menentukan teks status berdasarkan role
+  // Status role
   let statusText = '';
-  if (adminIds.includes(userId)) { // Cek jika user adalah admin
+  if (isAdmin) {
     statusText = `👑 <b>Role :</b> <code>Admin</code>`;
   } else if (userRole === 'reseller') {
     statusText = `🏆 <b>Role :</b> <code>Reseller</code>`;
   } else {
-    statusText = `👤 <b>Role :</b> <code>Member</code>`; // Mengubah emoji untuk Member
+    statusText = `👤 <b>Role :</b> <code>Member</code>`;
   }
 
-// Pesan utama dengan format yang sudah padat dan rapi
-const messageText = `
+  // Pesan utama
+  const messageText = `
 <b>┏━━━━━━━━━━━━━━━━━━━━━━━━━━━┓</b>
 ┃ 💎 <b>${NAMA_STORE}</b>  
 ┃ 🚀 <b>Top-Up otomatis tanpa tunggu admin</b>  
 <b>┗━━━━━━━━━━━━━━━━━━━━━━━━━━━┛</b>
-<blockquote>
+
 <b>┏━━━━━━━━━━━━━━━━━━┓</b>
 ┃ 📊 <b>Statistik Kamu</b>  
 ┃ 📅 Hari ini : <b>${userToday}</b> akun  
 ┃ 📆 Minggu ini : <b>${userWeek}</b> akun  
 ┃ 🗓️ Bulan ini : <b>${userMonth}</b> akun  
-┃
+
 ┃ 🌍 <b>Statistik Global</b>  
 ┃ 📅 Hari ini : <b>${globalToday}</b> akun  
 ┃ 📆 Minggu ini : <b>${globalWeek}</b> akun  
 ┃ 🗓️ Bulan ini : <b>${globalMonth}</b> akun  
 <b>┗━━━━━━━━━━━━━━━━━━┛</b>
-</blockquote><b>┏━━━━━━━━━━━━━━━━━━━━━━━━━━━┓</b>
+
+<b>┏━━━━━━━━━━━━━━━━━━━━━━━━━━━┓</b>
 ┃ ${statusText}  
 ┃ 👤 <b>User</b> : ${userName}  
 ┃ 🆔 <b>ID User</b>  : <code>${userId}</code>  
