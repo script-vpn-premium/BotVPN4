@@ -579,8 +579,7 @@ const messageText = `
 ┃ 📆 Minggu ini : <b>${globalWeek}</b> akun  
 ┃ 🗓️ Bulan ini  : <b>${globalMonth}</b> akun  
 <b>┗━━━━━━━━━━━━━━━━━━┛</b>
-</blockquote>
-<b>┏━━━━━━━━━━━━━━━━━━━━━━━━━━━┓</b>
+</blockquote><b>┏━━━━━━━━━━━━━━━━━━━━━━━━━━━┓</b>
 ┃ ${statusText}  
 ┃ 👤 <b>User</b> : ${userName}  
 ┃ 🆔 <b>ID User</b>  : <code>${userId}</code>  
