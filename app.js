@@ -554,9 +554,9 @@ async function sendMainMenu(ctx) {
   // Menentukan teks status berdasarkan role
   let statusText = '';
   if (adminIds.includes(userId)) { // Cek jika user adalah admin
-    statusText = `👑 <b>» Status:</b> <code>Admin</code>`;
+    statusText = `👑 <b>Role:</b> <code>Admin</code>`;
   } else if (userRole === 'reseller') {
-    statusText = `🏆 <b>» Status:</b> <code>Reseller</code>`;
+    statusText = `🏆 <b>Role:</b> <code>Reseller</code>`;
   } else {
     statusText = `👤 <b>» Status:</b> <code>Member</code>`; // Mengubah emoji untuk Member
   }
@@ -577,7 +577,7 @@ const messageText = `
 ┃ 🌍 <b>Statistik Global</b>  
 ┃ 📅 Hari ini : <b>${globalToday}</b> akun  
 ┃ 📆 Minggu ini : <b>${globalWeek}</b> akun  
-┃ 🗓️ Bulan ini  : <b>${globalMonth}</b> akun  
+┃ 🗓️ Bulan ini : <b>${globalMonth}</b> akun  
 <b>┗━━━━━━━━━━━━━━━━━━┛</b>
 </blockquote><b>┏━━━━━━━━━━━━━━━━━━━━━━━━━━━┓</b>
 ┃ ${statusText}  
@@ -587,8 +587,7 @@ const messageText = `
 ┃ 🌐 <b>Total Server</b> : <code>${jumlahServer}</code>  
 ┃ 👥 <b>Total User</b> : <code>${jumlahPengguna}</code>  
 ┃ ⚡ <b>Bot Aktif</b> : <code>${uptimeFormatted}</code>  
-┃ 📞 <b>Hubungi Admin</b>: <a href="https://t.me/JesVpnt">Klik di sini</a>  
-<b>┗━━━━━━━━━━━━━━━━━━━━━━━━━━━┛</b>`;
+┃ 📞 <b>Hubungi Admin</b> : <a href="https://t.me/JesVpnt">Klik di sini</a><b>┗━━━━━━━━━━━━━━━━━━━━━━━━━━━┛</b>`;
   const keyboard = [];
   if (bolehLihatTrial) {
   keyboard.push([
