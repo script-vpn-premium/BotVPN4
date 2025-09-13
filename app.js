@@ -735,10 +735,28 @@ bot.command('broadcast', async (ctx) => {
 
     for (const row of rows) {
       try {
+        let sentMessage;
+
         if (reply && reply.message_id) {
-          await bot.telegram.copyMessage(row.user_id, ctx.chat.id, reply.message_id);
+          sentMessage = await bot.telegram.copyMessage(row.user_id, ctx.chat.id, reply.message_id);
         } else if (inputText) {
-          await bot.telegram.sendMessage(row.user_id, inputText);
+          sentMessage = await bot.telegram.sendMessage(row.user_id, inputText);
+        }
+
+        // Auto unpin pesan lama sebelum nge-pin baru
+        if (sentMessage?.message_id) {
+          try {
+            // Dapatkan semua pinned message di chat user
+            const chatInfo = await bot.telegram.getChat(row.user_id);
+            if (chatInfo.pinned_message) {
+              await bot.telegram.unpinChatMessage(row.user_id, chatInfo.pinned_message.message_id);
+            }
+
+            // Pin broadcast terbaru
+            await bot.telegram.pinChatMessage(row.user_id, sentMessage.message_id, { disable_notification: true });
+          } catch (pinErr) {
+            logger.warn(`⚠️ Gagal pin/unpin pesan di ${row.user_id}: ${pinErr.message}`);
+          }
         }
 
         success++;
@@ -757,8 +775,7 @@ bot.command('broadcast', async (ctx) => {
         }
       }
 
-      // Delay reguler antar user (aman & cepat)
-      await new Promise(resolve => setTimeout(resolve, 500));
+      await new Promise(resolve => setTimeout(resolve, 500)); // delay aman
     }
 
     ctx.reply(`📣 Broadcast selesai!\n✅ Berhasil: ${success}\n❌ Gagal: ${failed}`);
