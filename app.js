@@ -517,12 +517,6 @@ async function sendMainMenu(ctx) {
   const seconds = Math.floor(uptime % 60);
   const uptimeFormatted = `${days}d ${hours}h ${minutes}m ${seconds}s`;
 
-  // Tanggal & waktu
-  const dayNames = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
-  const currentDay = dayNames[now.getDay()];
-  const currentDate = new Intl.DateTimeFormat('id-ID', { day: 'numeric', month: 'long', year: 'numeric' }).format(now);
-  const timeNow = now.toTimeString().split(' ')[0];
-
   // Jumlah server
   let jumlahServer = 0;
   try {
@@ -543,8 +537,32 @@ async function sendMainMenu(ctx) {
     statusText = `👤 <b>Role :</b> <code>Member</code>`;
   }
 
-  // Pesan utama
-  const messageText = `
+  // Ambil top-up terakhir (misal dari tabel log_topup)
+let topUpTerakhir = null;
+try {
+  topUpTerakhir = await new Promise((resolve, reject) => {
+    db.get('SELECT u.username, t.amount FROM log_topup t INNER JOIN users u ON t.user_id = u.user_id ORDER BY t.waktu_topup DESC LIMIT 1', (err, row) => {
+      if (err) reject(err); else resolve(row);
+    });
+  });
+} catch (e) {
+  logger.error('❌ Gagal ambil top-up terakhir:', e.message);
+}
+
+// Tambahkan teks top-up terbaru
+let topUpText = '';
+if (topUpTerakhir) {
+  topUpText = `
+<b>┏━━━━━━━━━━━━━━━━━━┓</b>
+┃ 💰 <b>Baru Saja Top-Up</b>
+┃ ➡️ <b>User : ${topUpTerakhir.username}</b>
+┃ 💵 <b>Jumlah : Rp${topUpTerakhir.amount.toLocaleString('id-ID')}</b>
+<b>┗━━━━━━━━━━━━━━━━━━┛</b>
+`;
+}
+
+// Pesan utama digabung dengan top-up terbaru
+const messageText = `
 <b>┏━━━━━━━━━━━━━━━━━━━━━━━━━━━┓</b>
 ┃ 💎 <b>${NAMA_STORE}</b>  
 ┃ 🚀 <b>Top-Up otomatis tanpa tunggu admin</b>  
@@ -553,23 +571,25 @@ async function sendMainMenu(ctx) {
 <b>┏━━━━━━━━━━━━━━━━━━┓</b>
 ┃ 📊 <b>Statistik Kamu</b>  
 ┃ 📅 Hari ini : <b>${userToday}</b> akun  
-┃ 📆 Minggu ini : <b>${userWeek}</b> akun  
-┃ 🗓️ Bulan ini : <b>${userMonth}</b> akun  
+┃ 📆 Minggu ini :<b>${userWeek}</b> akun  
+┃ 🗓️ Bulan ini :<b>${userMonth}</b> akun  
 ┃
 ┃ 🌍 <b>Statistik Global</b>  
 ┃ 📅 Hari ini : <b>${globalToday}</b> akun  
-┃ 📆 Minggu ini : <b>${globalWeek}</b> akun  
-┃ 🗓️ Bulan ini : <b>${globalMonth}</b> akun  
+┃ 📆 Minggu ini :<b>${globalWeek}</b> akun  
+┃ 🗓️ Bulan ini :<b>${globalMonth}</b> akun  
 <b>┗━━━━━━━━━━━━━━━━━━┛</b>
-</blockquote><b>┏━━━━━━━━━━━━━━━━━━━━━━━━━━━┓</b>
+</blockquote>
+${topUpText}
+<b>┏━━━━━━━━━━━━━━━━━━━━━━━━━━━┓</b>
 ┃ ${statusText}  
 ┃ 👤 <b>User</b> : ${userName}  
-┃ 🆔 <b>ID User</b>  : <code>${userId}</code>  
-┃ 💳 <b>Total Saldo : </b> Rp<code>${saldo.toLocaleString('id-ID')}</code> 
+┃ 🆔 <b>ID User</b> :<code>${userId}</code>  
+┃ 💳 <b>Total Saldo : Rp</b><code>${saldo.toLocaleString('id-ID')}</code> 
 ┃ 🌐 <b>Total Server : ${jumlahServer}</b>
 ┃ 👥 <b>Total User : ${jumlahPengguna}</b>
 ┃ ⚡ <b>Bot Aktif : ${uptimeFormatted}</b>
-┃ 📞 <b>Hubungi Admin</b> : <a href="https://t.me/${adminUsername}">Klik di sini</a>
+┃ 📞 <b>Hubungi Admin</b> :<a href="https://t.me/${adminUsername}">Klik di sini</a>
 <b>┗━━━━━━━━━━━━━━━━━━━━━━━━━━━┛</b>`;
   const keyboard = [];
   if (bolehLihatTrial) {
