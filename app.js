@@ -549,27 +549,26 @@ async function sendMainMenu(ctx) {
 ┃ 💎 <b>${NAMA_STORE}</b>  
 ┃ 🚀 <b>Top-Up otomatis tanpa tunggu admin</b>  
 <b>┗━━━━━━━━━━━━━━━━━━━━━━━━━━━┛</b>
-
+<blockquote>
 <b>┏━━━━━━━━━━━━━━━━━━┓</b>
 ┃ 📊 <b>Statistik Kamu</b>  
 ┃ 📅 Hari ini : <b>${userToday}</b> akun  
 ┃ 📆 Minggu ini : <b>${userWeek}</b> akun  
 ┃ 🗓️ Bulan ini : <b>${userMonth}</b> akun  
-
+┃
 ┃ 🌍 <b>Statistik Global</b>  
 ┃ 📅 Hari ini : <b>${globalToday}</b> akun  
 ┃ 📆 Minggu ini : <b>${globalWeek}</b> akun  
 ┃ 🗓️ Bulan ini : <b>${globalMonth}</b> akun  
 <b>┗━━━━━━━━━━━━━━━━━━┛</b>
-
-<b>┏━━━━━━━━━━━━━━━━━━━━━━━━━━━┓</b>
+</blockquote><b>┏━━━━━━━━━━━━━━━━━━━━━━━━━━━┓</b>
 ┃ ${statusText}  
 ┃ 👤 <b>User</b> : ${userName}  
 ┃ 🆔 <b>ID User</b>  : <code>${userId}</code>  
-┃ 💳 <b>Total Saldo</b>  : <code>Rp${saldo.toLocaleString('id-ID')}</code> 
-┃ 🌐 <b>Total Server</b> : <code>${jumlahServer}</code>  
-┃ 👥 <b>Total User</b> : <code>${jumlahPengguna}</code>  
-┃ ⚡ <b>Bot Aktif</b> : <code>${uptimeFormatted}</code>  
+┃ 💳 <b>Total Saldo : </b> Rp<code>${saldo.toLocaleString('id-ID')}</code> 
+┃ 🌐 <b>Total Server : ${jumlahServer}</b>
+┃ 👥 <b>Total User : ${jumlahPengguna}</b>
+┃ ⚡ <b>Bot Aktif : ${uptimeFormatted}</b>
 ┃ 📞 <b>Hubungi Admin</b> : <a href="https://t.me/${adminUsername}">Klik di sini</a>
 <b>┗━━━━━━━━━━━━━━━━━━━━━━━━━━━┛</b>`;
   const keyboard = [];
