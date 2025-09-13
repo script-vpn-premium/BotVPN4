@@ -551,44 +551,55 @@ async function sendMainMenu(ctx) {
     logger.error('Gagal ambil data jumlah server:', e.message);
   }
 
-  // Menentukan teks status berdasarkan role
-  let statusText = '';
-  if (adminIds.includes(userId)) { // Cek jika user adalah admin
-    statusText = `👑 <b>Role :</b> <code>Admin</code>`;
-  } else if (userRole === 'reseller') {
-    statusText = `🏆 <b>Role :</b> <code>Reseller</code>`;
-  } else {
-    statusText = `👤 <b>Role :</b> <code>Member</code>`; // Mengubah emoji untuk Member
-  }
+  // Misal variabel topUpTerakhir menyimpan info top-up terbaru
+// Contoh: { userName: "Lita", amount: 50000 }
+let topUpText = '';
+if (topUpTerakhir) {
+  topUpText = `║💰 <b>User Baru Saja Top-Up</b>\n║➡️  User ${topUpTerakhir.userName}\n║💵 Rp${topUpTerakhir.amount.toLocaleString('id-ID')}`;
+}
 
-// Pesan utama dengan format yang sudah padat dan rapi
+// Menentukan teks status berdasarkan role
+let statusText = '';
+if (adminIds.includes(userId)) {
+  statusText = `👑 <b>Role :</b> <code>Admin</code>`;
+} else if (userRole === 'reseller') {
+  statusText = `🏆 <b>Role :</b> <code>Reseller</code>`;
+} else {
+  statusText = `👤 <b>Role :</b> <code>Member</code>`;
+}
+
+// Pesan utama dengan tampilan modern & stylish
 const messageText = `
-<b>┏━━━━━━━━━━━━━━━━━━━━━━━━━━━┓</b>
-┃ 💎 <b>${NAMA_STORE}</b>  
-┃ 🚀 <b>Top-Up otomatis tanpa tunggu admin</b>  
-<b>┗━━━━━━━━━━━━━━━━━━━━━━━━━━━┛</b>
-<blockquote>
-<b>┏━━━━━━━━━━━━━━━━━━┓</b>
-┃ 📊 <b>Statistik Kamu</b>  
-┃ 📅 Hari ini : <b>${userToday}</b> akun  
-┃ 📆 Minggu ini : <b>${userWeek}</b> akun  
-┃ 🗓️ Bulan ini : <b>${userMonth}</b> akun  
-┃
-┃ 🌍 <b>Statistik Global</b>  
-┃ 📅 Hari ini : <b>${globalToday}</b> akun  
-┃ 📆 Minggu ini : <b>${globalWeek}</b> akun  
-┃ 🗓️ Bulan ini : <b>${globalMonth}</b> akun  
-<b>┗━━━━━━━━━━━━━━━━━━┛</b>
-</blockquote><b>┏━━━━━━━━━━━━━━━━━━━━━━━━━━━┓</b>
-┃ ${statusText}  
-┃ 👤 <b>User</b> : ${userName}  
-┃ 🆔 <b>ID User</b>  : <code>${userId}</code>  
-┃ 💳 <b>Total Saldo</b>  : <code>Rp${saldo.toLocaleString('id-ID')}</code> 
-┃ 🌐 <b>Total Server</b> : <code>${jumlahServer}</code>  
-┃ 👥 <b>Total User</b> : <code>${jumlahPengguna}</code>  
-┃ ⚡ <b>Bot Aktif</b> : <code>${uptimeFormatted}</code>  
-┃ 📞 <b>Hubungi Admin</b> : <a href="https://t.me/JesVpnt">Klik di sini</a>
-<b>┗━━━━━━━━━━━━━━━━━━━━━━━━━━━┛</b>`;
+╔════════════════════╗
+║ 💎 <b>${NAMA_STORE}</b>
+║ 🚀 Top-Up otomatis tanpa tunggu admin
+╚════════════════════╝
+╔════════════════════╗
+║ 📊 <b>Statistik Kamu</b>
+║ ──────────────────
+║ 📅 Hari ini : <b>${userToday}</b>
+║ 📆 Minggu ini : <b>${userWeek}</b>
+║ 🗓️ Bulan ini : <b>${userMonth}</b>
+║
+║ 🌍 <b>Statistik Global</b>
+║ ──────────────────
+║ 📅 Hari ini : <b>${globalToday}</b>
+║ 📆 Minggu ini : <b>${globalWeek}</b>
+║ 🗓️ Bulan ini : <b>${globalMonth}</b>
+╚════════════════════╝
+
+${topUpText ? '╔════════════════════╗\n' + topUpText + '\n╚════════════════════╝' : ''}
+╔════════════════════╗
+║ ${statusText}
+║ 👤 <b>User :</b> ${userName}
+║ 🆔 <b>ID User :</b> <code>${userId}</code>
+║ 💳 <b>Total Saldo :</b> Rp${saldo.toLocaleString('id-ID')}
+║ 🌐 <b>Total Server :</b> ${jumlahServer}
+║ 👥 <b>Total User :</b> ${jumlahPengguna}
+║ ⚡ <b>Bot Aktif :</b> ${uptimeFormatted}
+║ 📞 <b>Hubungi Admin :</b> <a href="https://t.me/JesVpnt">Klik di sini</a>
+╚════════════════════╝
+`;
   const keyboard = [];
   if (bolehLihatTrial) {
   keyboard.push([
@@ -4666,7 +4677,7 @@ async function handleEditHarga(ctx, userStateData, data) {
   }
 
   userStateData.amount = currentAmount;
-  const newMessage = `💰 *Silahkan masukkan harga server baru:*\n\nJumlah saat ini: *Rp ${currentAmount}*`;
+  const newMessage = `?? *Silahkan masukkan harga server baru:*\n\nJumlah saat ini: *Rp ${currentAmount}*`;
   if (newMessage !== ctx.callbackQuery.message.text) {
     await ctx.editMessageText(newMessage, {
       reply_markup: { inline_keyboard: keyboard_nomor() },
