@@ -1892,7 +1892,7 @@ async function startSelectServer(ctx, action, type, page = 0) {
         return ctx.reply('⚠️ *PERHATIAN!* Tidak ada server yang tersedia saat ini. Coba lagi nanti!', { parse_mode: 'Markdown' });
       }
 
-      const serversPerPage = 6;
+      const serversPerPage = 3;
       const totalPages = Math.ceil(servers.length / serversPerPage);
       const currentPage = Math.min(Math.max(page, 0), totalPages - 1);
       const start = currentPage * serversPerPage;
@@ -2519,8 +2519,8 @@ bot.on('text', async (ctx, next) => {
         const input = ctx.message.text.trim();
         const nominal = parseInt(input.replace(/[^\d]/g, ''), 10);
 
-        if (isNaN(nominal) || nominal < 100) {
-            return ctx.reply('❌ *Nominal tidak valid. Minimal Rp100.*', { parse_mode: 'Markdown' });
+        if (isNaN(nominal) || nominal < 5000) {
+            return ctx.reply('❌ *Nominal tidak valid. Minimal Rp5000.*', { parse_mode: 'Markdown' });
         }
 
         const topupAction = global.depositState[userId].action;
@@ -4034,7 +4034,7 @@ bot.action('topup_saldo', async (ctx) => {
 
     // Kirim instruksi ke user untuk mengetik nominal
     const sent = await ctx.reply(
-      '💳 *Silahkan ketik nominal top-up yang ingin*\n💰 *Anda bayarkan melalui QRIS Orkut.*\n\n💰 *Minimal topup Rp 100*\n👉 Contoh: `10000`',
+      '💳 *Silahkan ketik nominal top-up yang ingin*\n💰 *Anda bayarkan melalui QRIS Orkut.*\n\n💰 *Minimal topup Rp 5000*\n👉 Contoh: `10000`',
       { parse_mode: 'Markdown' }
     );
 
@@ -4517,8 +4517,8 @@ async function handleDepositState(ctx, userId, data) {
       return await ctx.answerCbQuery('⚠️ Jumlah tidak boleh kosong!', { show_alert: true });
     }
 
-    if (parseInt(currentAmount) < 100) {
-      return await ctx.answerCbQuery('⚠️ Jumlah minimal top-up adalah 100 Ya Kak...!!!', { show_alert: true });
+    if (parseInt(currentAmount) < 5000) {
+      return await ctx.answerCbQuery('⚠️ Jumlah minimal top-up adalah 5000 Ya Kak...!!!', { show_alert: true });
     }
 
     // Hapus pesan input nominal
@@ -4553,7 +4553,7 @@ async function handleDepositState(ctx, userId, data) {
   const newMessage =
     action === 'request_amount_saweria'
       ? `💰 Masukkan nominal topup Saweria QRIS:\n\nNominal saat ini: *Rp${currentAmount}*`
-      : `💳 Topup Saldo Otomatis QRIS\n━━━━━━━━━━━━━━━━━━━━━━\nMasukkan nominal topup:\n\nRp ${currentAmount}\n\nMinimal topup Rp 100\n━━━━━━━━━━━━━━━━━━━━━━\nGunakan tombol di bawah untuk input nominal.`;
+      : `💳 Topup Saldo Otomatis QRIS\n━━━━━━━━━━━━━━━━━━━━━━\nMasukkan nominal topup:\n\nRp ${currentAmount}\n\nMinimal topup Rp 5000\n━━━━━━━━━━━━━━━━━━━━━━\nGunakan tombol di bawah untuk input nominal.`;
 
   try {
     await ctx.editMessageText(newMessage, {
