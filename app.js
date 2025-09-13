@@ -565,7 +565,7 @@ async function sendMainMenu(ctx) {
   const messageText = `
 <b>┏━━━━━━━━━━━━━━━━━━━━━━━━━━━┓</b>
 ┃ 💎 <b>${NAMA_STORE}</b>  
-┃ 🚀 <i>Top-Up otomatis tanpa tunggu admin</i>  </b>
+┃ 🚀 <b>Top-Up otomatis tanpa tunggu admin</b>
 <b>┗━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
 ┃ <blockquote>
 <b>┏━━━━━━━━━━━━━━━━━━━━━━┓</b>
