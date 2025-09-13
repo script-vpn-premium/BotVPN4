@@ -567,7 +567,6 @@ const messageText = `
 ┃ 💎 <b>${NAMA_STORE}</b>  
 ┃ 🚀 <b>Top-Up otomatis tanpa tunggu admin</b>  
 <b>┗━━━━━━━━━━━━━━━━━━━━━━━━━━━┛</b>
-
 <blockquote>
 <b>┏━━━━━━━━━━━━━━━━━━━━━━┓</b>
 ┃ 📊 <b>Statistik Kamu</b>  
@@ -581,12 +580,11 @@ const messageText = `
 ┃ 🗓️ Bulan ini  : <b>${globalMonth}</b> akun  
 <b>┗━━━━━━━━━━━━━━━━━━━━━━┛</b>
 </blockquote>
-
 <b>┏━━━━━━━━━━━━━━━━━━━━━━━━━━━┓</b>
 ┃ ${statusText}  
 ┃ 👤 <b>User</b> : ${userName}  
-┃ 🆔 <b>ID</b>  : <code>${userId}</code>  
-┃ 💳 <b>Saldo</b>  : <code>Rp${saldo.toLocaleString('id-ID')}</code>  
+┃ 🆔 <b>ID User</b>  : <code>${userId}</code>  
+┃ 💳 <b>Total Saldo</b>  : <code>Rp${saldo.toLocaleString('id-ID')}</code> 
 ┃ 🌐 <b>Total Server</b> : <code>${jumlahServer}</code>  
 ┃ 👥 <b>Total User</b> : <code>${jumlahPengguna}</code>  
 ┃ ⚡ <b>Bot Aktif</b> : <code>${uptimeFormatted}</code>  
