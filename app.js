@@ -554,11 +554,11 @@ async function sendMainMenu(ctx) {
   // Menentukan teks status berdasarkan role
   let statusText = '';
   if (adminIds.includes(userId)) { // Cek jika user adalah admin
-    statusText = `👑 <b>Role:</b> <code>Admin</code>`;
+    statusText = `👑 <b>Role :</b> <code>Admin</code>`;
   } else if (userRole === 'reseller') {
-    statusText = `🏆 <b>Role:</b> <code>Reseller</code>`;
+    statusText = `🏆 <b>Role :</b> <code>Reseller</code>`;
   } else {
-    statusText = `👤 <b>» Status:</b> <code>Member</code>`; // Mengubah emoji untuk Member
+    statusText = `👤 <b>Role :</b> <code>Member</code>`; // Mengubah emoji untuk Member
   }
 
 // Pesan utama dengan format yang sudah padat dan rapi
