@@ -45,8 +45,14 @@ async function trialssh(username, password, exp, iplimit, serverId) {
 *BadVPN UDP*: \`7300\`
 *Pub Key* : \`${sshData.pubkey}\`
 ───────────────────────
-*HTTP CUSTOM*
-\`${sshData.domain}:80@${sshData.username}:${sshData.password}\`
+*SSH WS*
+\`${sshData.domain}:8080@${sshData.username}:${sshData.password}\`
+*SSH WS SSL*
+\`${sshData.domain}:8443@${sshData.username}:${sshData.password}\`
+*SSH SETTUNNEL*
+\`${sshData.domain}:4444@${sshData.username}:${sshData.password}\`
+*UDP CUOSTOM*
+\`${sshData.domain}:1-65535@${sshData.username}:${sshData.password}\`
 ───────────────────────
 *Payload*: 
 \`GET /cdn-cgi/trace HTTP/1.1[crlf]Host: Bug_Kalian[crlf][crlf]GET-RAY / HTTP/1.1[crlf]Host: [host][crlf]Connection: Upgrade[crlf]User-Agent: [ua][crlf]Upgrade: websocket[crlf][crlf]\`
@@ -397,8 +403,14 @@ async function createssh(username, password, exp, iplimit, serverId) {
 *BadVPN UDP*: \`7300\`
 *Pub Key* : \`${sshData.pubkey}\`
 ───────────────────────
-*HTTP CUSTOM*
-\`${sshData.domain}:80@${sshData.username}:${sshData.password}\`
+*SSH WS*
+\`${sshData.domain}:8080@${sshData.username}:${sshData.password}\`
+*SSH WS SSL*
+\`${sshData.domain}:8443@${sshData.username}:${sshData.password}\`
+*SSH SETTUNNEL*
+\`${sshData.domain}:4444@${sshData.username}:${sshData.password}\`
+*UDP CUOSTOM*
+\`${sshData.domain}:1-65535@${sshData.username}:${sshData.password}\`
 ───────────────────────
 *Payload*: 
 \`GET /cdn-cgi/trace HTTP/1.1[crlf]Host: Bug_Kalian[crlf][crlf]GET-RAY / HTTP/1.1[crlf]Host: [host][crlf]Connection: Upgrade[crlf]User-Agent: [ua][crlf]Upgrade: websocket[crlf][crlf]\`
