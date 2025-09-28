@@ -20,23 +20,26 @@ async function renewssh(username, exp, limitip, serverId) {
 
       const domain = server.domain;
       const auth = server.auth;
-      const param = `:5888/renewssh?user=${username}&exp=${exp}&iplimit=${limitip}&auth=${auth}`;
+      const param = `:9443/renewssh?user=${username}&exp=${exp}&iplimit=${limitip}&auth=${auth}`;
       const url = `http://${domain}${param}`;
       axios.get(url)
         .then(response => {
           if (response.data.status === "success") {
             const sshData = response.data.data;
             const msg = `
-────────────────────
-❇️ *RENEW SSH PREMIUM* ❇️
-────────────────────
-┌───────────────────
-│ Username: \`${username}\`
-│ Kadaluarsa: \`${sshData.expired}\`
-│ Batas IP: \`${sshData.ip_limit}\`
-└───────────────────
-✅ *Akun berhasil diperbarui* ✨
-*Makasih sudah pakai layanan kami*
+*╭─────────────────────╮*
+*│❇️ PERPANJANGAN BERHASIL ❇️*
+*╰─────────────────────╯*
+*╭─────────────────────╮*
+*│ » Tipe Akun:* \`SSH\`
+*│*
+*│ » Username:* \`${username}\`
+*│ » Kadaluarsa:* \`${sshData.expired}\`
+*│ » Batas IP:* \`${sshData.ip_limit} IP\`
+*╰─────────────────────╯*
+*╭─────────────────────╮*
+*│          🤖️ » Happy Surfing ⚡*
+*╰─────────────────────╯*
 `;
          
               console.log('SSH account renewed successfully');
@@ -71,24 +74,27 @@ async function renewvmess(username, exp, quota, limitip, serverId) {
   
         const domain = server.domain;
         const auth = server.auth;
-        const param = `:5888/renewvmess?user=${username}&exp=${exp}&quota=${quota}&iplimit=${limitip}&auth=${auth}`;
+        const param = `:9443/renewvmess?user=${username}&exp=${exp}&quota=${quota}&iplimit=${limitip}&auth=${auth}`;
         const url = `http://${domain}${param}`;
         axios.get(url)
           .then(response => {
             if (response.data.status === "success") {
               const vmessData = response.data.data;
               const msg = `
-─────────────────────
-❇️ *RENEW VMESS PREMIUM* ❇️
-─────────────────────
-┌────────────────────
-│ Username: \`${username}\`
-│ Kadaluarsa: \`${vmessData.expired}\`
-│ Kuota: \`${vmessData.quota === '0 GB' ? 'Unlimited' : vmessData.quota}\`
-│ Batas IP: \`${vmessData.ip_limit === '0' ? 'Unlimited' : vmessData.ip_limit} IP\`
-└────────────────────
-✅ *Akun berhasil diperbarui* ✨
-*Makasih sudah pakai layanan kami*
+*╭─────────────────────╮*
+*│❇️ PERPANJANGAN BERHASIL ❇️*
+*╰─────────────────────╯*
+*╭─────────────────────╮*
+*│ » Tipe Akun:* \`Vmess\`
+*│*
+*│ » Username:* \`${username}\`
+*│ » Kadaluarsa:* \`${vmessData.expired}\`
+*│ » Batas Quota:* \`${vmessData.quota === '0 GB' ? 'Unlimited' : vmessData.quota}\`
+*│ » Batas IP:* \`${vmessData.ip_limit === '0' ? 'Unlimited' : vmessData.ip_limit} IP\`
+*╰─────────────────────╯*
+*╭─────────────────────╮*
+*│          🤖️ » Happy Surfing ⚡*
+*╰─────────────────────╯*
   `;
                 console.log('VMess account renewed successfully');
                 return resolve(msg);
@@ -122,24 +128,27 @@ async function renewvmess(username, exp, quota, limitip, serverId) {
   
         const domain = server.domain;
         const auth = server.auth;
-        const param = `:5888/renewvless?user=${username}&exp=${exp}&quota=${quota}&iplimit=${limitip}&auth=${auth}`;
+        const param = `:9443/renewvless?user=${username}&exp=${exp}&quota=${quota}&iplimit=${limitip}&auth=${auth}`;
         const url = `http://${domain}${param}`;
         axios.get(url)
           .then(response => {
             if (response.data.status === "success") {
               const vlessData = response.data.data;
               const msg = `
-─────────────────────
-❇️ *RENEW VLESS PREMIUM* ❇️
-─────────────────────
-┌────────────────────
-│ Username: \`${username}\`
-│ Kadaluarsa: \`${vlessData.expired}\`
-│ Kuota: \`${vlessData.quota === '0 GB' ? 'Unlimited' : vlessData.quota}\`
-│ Batas IP: \`${vlessData.ip_limit === '0' ? 'Unlimited' : vlessData.ip_limit} IP\`
-└────────────────────
-✅ *Akun berhasil diperbarui* ✨
-*Makasih sudah pakai layanan kami*
+*╭─────────────────────╮*
+*│❇️ PERPANJANGAN BERHASIL ❇️*
+*╰─────────────────────╯*
+*╭─────────────────────╮*
+*│ » Tipe Akun:* \`Vless\`
+*│*
+*│ » Username:* \`${username}\`
+*│ » Kadaluarsa:* \`${vlessData.expired}\`
+*│ » Batas Quota:* \`${vlessData.quota === '0 GB' ? 'Unlimited' : vlessData.quota}\`
+*│ » Batas IP:* \`${vlessData.ip_limit === '0' ? 'Unlimited' : vlessData.ip_limit} IP\`
+*╰─────────────────────╯*
+*╭─────────────────────╮*
+*│          🤖️ » Happy Surfing ⚡*
+*╰─────────────────────╯*
   `;
            
                 console.log('VLess account renewed successfully');
@@ -174,24 +183,27 @@ async function renewvmess(username, exp, quota, limitip, serverId) {
   
         const domain = server.domain;
         const auth = server.auth;
-        const param = `:5888/renewtrojan?user=${username}&exp=${exp}&quota=${quota}&iplimit=${limitip}&auth=${auth}`;
+        const param = `:9443/renewtrojan?user=${username}&exp=${exp}&quota=${quota}&iplimit=${limitip}&auth=${auth}`;
         const url = `http://${domain}${param}`;
         axios.get(url)
           .then(response => {
             if (response.data.status === "success") {
               const trojanData = response.data.data;
               const msg = `
-─────────────────────
-❇️ *RENEW TROJAN PREMIUM* ❇️
-─────────────────────
-┌────────────────────
-│ Username: \`${username}\`
-│ Kadaluarsa: \`${trojanData.expired}\`
-│ Kuota: \`${trojanData.quota === '0 GB' ? 'Unlimited' : trojanData.quota}\`
-│ Batas IP: \`${trojanData.ip_limit === '0' ? 'Unlimited' : trojanData.ip_limit} IP\`
-└────────────────────
-✅ *Akun berhasil diperbarui* ✨
-*Makasih sudah pakai layanan kami*
+*╭─────────────────────╮*
+*│❇️ PERPANJANGAN BERHASIL ❇️*
+*╰─────────────────────╯*
+*╭─────────────────────╮*
+*│ » Tipe Akun:* \`Trojan\`
+*│*
+*│ » Username:* \`${username}\`
+*│ » Kadaluarsa:* \`${trojanData.expired}\`
+*│ » Batas Quota:* \`${trojanData.quota === '0 GB' ? 'Unlimited' : trojanData.quota}\`
+*│ » Batas IP:* \`${trojanData.ip_limit === '0' ? 'Unlimited' : trojanData.ip_limit} IP\`
+*╰─────────────────────╯*
+*╭─────────────────────╮*
+*│          🤖️ » Happy Surfing ⚡*
+*╰─────────────────────╯*
   `;
            
                 console.log('Trojan account renewed successfully');
@@ -226,24 +238,27 @@ async function renewvmess(username, exp, quota, limitip, serverId) {
   
         const domain = server.domain;
         const auth = server.auth;
-        const param = `:5888/renewshadowsocks?user=${username}&exp=${exp}&quota=${quota}&iplimit=${limitip}&auth=${auth}`;
+        const param = `:9443/renewshadowsocks?user=${username}&exp=${exp}&quota=${quota}&iplimit=${limitip}&auth=${auth}`;
         const url = `http://${domain}${param}`;
         axios.get(url)
           .then(response => {
             if (response.data.status === "success") {
               const shadowsocksData = response.data.data;
               const msg = `
-─────────────────────
-❇️ *RENEW SHDWSK PREMIUM* ❇️
-─────────────────────
-┌────────────────────
-│ Username: \`${username}\`
-│ Kadaluarsa: \`${shadowsocksData.expired}\`
-│ Kuota: \`${shadowsocksData.quota === '0 GB' ? 'Unlimited' : shadowsocksData.quota}\`
-│ Batas IP: \`${shadowsocksData.ip_limit === '0' ? 'Unlimited' : shadowsocksData.ip_limit} IP\`
-└────────────────────
-✅ *Akun berhasil diperbarui* ✨
-*Makasih sudah pakai layanan kami*
+*╭─────────────────────╮*
+*│❇️ PERPANJANGAN BERHASIL ❇️*
+*╰─────────────────────╯*
+*╭─────────────────────╮*
+*│ » Tipe Akun:* \`Shadowsocks\`
+*│*
+*│ » Username:* \`${username}\`
+*│ » Kadaluarsa:* \`${shadowsocksData.expired}\`
+*│ » Batas Quota:* \`${shadowsocksData.quota === '0 GB' ? 'Unlimited' : shadowsocksData.quota}\`
+*│ » Batas IP:* \`${shadowsocksData.ip_limit === '0' ? 'Unlimited' : shadowsocksData.ip_limit} IP\`
+*╰─────────────────────╯*
+*╭─────────────────────╮*
+*│          🤖️ » Happy Surfing ⚡*
+*╰─────────────────────╯*
   `;
            
                 console.log('Shadowsocks account renewed successfully');
