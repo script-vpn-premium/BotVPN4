@@ -566,43 +566,65 @@ async function sendMainMenu(ctx) {
     logger.error('Gagal ambil data jumlah server:', e.message);
   }
 
-  // Menentukan teks status berdasarkan role
-  let statusText = '';
-  if (adminIds.includes(userId)) { // Cek jika user adalah admin
-    statusText = `<b>» Role:</b> <code>Admin 🌀</code>`;
-  } else if (userRole === 'reseller') {
-    statusText = `<b>» Role:</b> <code>Reseller 🔑</code>`;
-  } else {
-    statusText = `<b>» Role:</b> <code>Member 📌</code>`; // Mengubah emoji untuk Member
-  }
+// Hitung total reseller dan status akun
+const jumlahReseller = resellerList.length;
+const totalAkunAktif = akunList.filter(a => a.status === 'aktif').length;
+const totalAkunNonaktif = akunList.filter(a => a.status === 'nonaktif').length;
 
-  // Pesan utama dengan format yang sudah padat dan rapi
-  const messageText = `
-<b>╭──────────────────────╮</b>
-<b>❇️ ≡   PGETUNNEL VPN STORE    ≡ ❇️</b>
-<b>╰──────────────────────╯</b>
-<b>╭──────────────────────</b>
+// Hitung total user yang pernah TopUp & total nominal seluruh TopUp
+const userPernahTopup = userList.filter(u => u.totalTopup && u.totalTopup > 0).length;
+const totalNominalTopup = userList.reduce((sum, u) => sum + (u.totalTopup || 0), 0);
+
+// Menentukan teks status berdasarkan role
+let statusText = '';
+if (adminIds.includes(userId)) {
+  statusText = `<b>» Role:</b> <code>Admin 🌀</code>`;
+} else if (userRole === 'reseller') {
+  statusText = `<b>» Role:</b> <code>Reseller 🔑</code>`;
+} else {
+  statusText = `<b>» Role:</b> <code>Member 📌</code>`;
+}
+
+// Pesan utama
+const messageText = `
+<b>╭────────────────────────────╮</b>
+<b>❇️ ≡  PGETUNNEL VPN STORE  ≡ ❇️</b>
+<b>╰────────────────────────────╯</b>
+<b>╭────────────────────────────</b>
 <b>┣ 💰 Saldo Anda:</b> <code>Rp.${saldo.toLocaleString('id-ID')}</code>
-<b>┣──────────────────────</b>
-<b>┣ » User:</b> ${userName}
-<b>┣ » ID User:</b> <code>${userId}</code>
+<b>┣────────────────────────────</b>
+<b>┣ 👤 User:</b> ${userName}
+<b>┣ 🆔 ID User:</b> <code>${userId}</code>
 <b>┣ </b>${statusText}
-<b>╰──────────────────────</b>
-<blockquote>✏️ <b>Statistik Anda:</b>
-<b>╭─────────────╮</b>
-» Hari Ini: ${userToday} akun
-» Minggu Ini: ${userWeek} akun
-» Bulan Ini: ${userMonth} akun
+<b>╰────────────────────────────╯</b>
+<blockquote>📊 <b>Aktivitas Akun Anda:</b>
+<b>╭───────────────╮</b>
+» Hari Ini: ${userToday} akun dibuat  
+» Minggu Ini: ${userWeek} akun dibuat  
+» Bulan Ini: ${userMonth} akun dibuat  
 
-🌐 <b>Statistik Global:</b>
-» Hari Ini: ${globalToday} akun
-» Minggu Ini: ${globalWeek} akun
-» Bulan Ini: ${globalMonth} akun
-<b>╰─────────────╯</b></blockquote>
-<b>╭──────────────────────╮</b>
-<b>❇️ Contact Admin:</b> <a href="https://t.me/${adminUsername}">@${adminUsername}</a>
-<b>╰──────────────────────╯</b>
-<b>Jumlah Server:</b> <code>${jumlahServer}</code> <b>|️  User:</b> <code>${jumlahPengguna}</code>`;
+🌐 <b>Statistik Global:</b>  
+» Hari Ini: ${globalToday} akun baru  
+» Minggu Ini: ${globalWeek} akun baru  
+» Bulan Ini: ${globalMonth} akun baru  
+<b>╰───────────────╯</b></blockquote>  
+<b>╭────────────────────────────╮</b>
+<b>❇️ Hubungi Admin jika butuh bantuan:</b>  
+<a href="https://t.me/${adminUsername}">@${adminUsername}</a>
+<b>╰────────────────────────────╯</b>
+<b>📡 Statistik Sistem:</b>
+<b>╭────────────────────────────</b>
+<b>┣ 🌍 Jumlah Server:</b> <code>${jumlahServer}</code>  
+<b>┣ 👥 Total User:</b> <code>${jumlahPengguna}</code>  
+<b>┣ 💼 Total Reseller:</b> <code>${jumlahReseller}</code>  
+<b>┣ 💳 User Pernah TopUp:</b> <code>${userPernahTopup}</code>  
+<b>┣ 💸 Total Nominal TopUp:</b> <code>Rp.${totalNominalTopup.toLocaleString('id-ID')}</code>  
+<b>┣ 🟢 Akun Aktif:</b> <code>${totalAkunAktif}</code>  
+<b>┣ 🔴 Akun Nonaktif:</b> <code>${totalAkunNonaktif}</code> <b>╰────────────────────────────╯</b>
+
+<b>🔰 PGETUNNEL — Koneksi Cepat Tanpa Batas 🔰</b>
+<i>“Kualitas dan stabilitas adalah prioritas kami.”</i>
+`;
 
   const keyboard = [];
 
