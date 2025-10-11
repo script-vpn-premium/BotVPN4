@@ -600,9 +600,12 @@ async function sendMainMenu(ctx) {
 » Bulan Ini: ${globalMonth} akun
 <b>╰─────────────╯</b></blockquote>
 <b>╭──────────────────────╮</b>
-<b>❇️ Contact Admin:</b> <a href="https://t.me/${adminUsername}">@${adminUsername}</a>
+<b>┣ »️ Contact Admin:</b> <a href="https://t.me/${adminUsername}">@${adminUsername}</a>
 <b>╰──────────────────────╯</b>
-<b>Jumlah Server:</b> <code>${jumlahServer}</code> <b>|️  User:</b> <code>${jumlahPengguna}</code>`;
+<b>╭──────────────────────╮</b>
+<b>┣ » Jumlah Server:</b> <code>${jumlahServer}</code>
+<b>┣ »️ Jumlah User:</b> <code>${jumlahPengguna}</code>
+<b>╰──────────────────────╯</b>`;
 
   const keyboard = [];
 
@@ -2078,7 +2081,7 @@ async function startSelectServer(ctx, action, type, page = 0) {
                     `❇️ *${server.nama_server}*\n` +
                     `━━━━━━━━━━━━━━━━━━━━━━\n` +
                     `🏷️ » Harga Per Bulan: Rp${hargaBulananTampilan.toLocaleString('id-ID')}\n` +
-                    `🚀 » Quota: ${server.quota} GB\n` +
+                    `🚀 » Limit Quota: ${server.quota} GB\n` +
                     `♂️ » Limit IP: ${server.iplimit} IP\n` +
                     (isFull ? `⚠️ » *Server Penuh*` : `🌀 » Total Create Akun: ${server.total_create_akun}/${server.batas_create_akun}`);
             }).join('\n\n');
