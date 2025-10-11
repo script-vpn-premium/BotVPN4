@@ -601,10 +601,8 @@ async function sendMainMenu(ctx) {
 <b>╰─────────────╯</b></blockquote>
 <b>╭──────────────────────╮</b>
 <b>❇️ Contact Admin:</b> <a href="https://t.me/${adminUsername}">@${adminUsername}</a>
-<b>├──────────────────────</b>
-<b>📊 Total Server:</b> <code>${jumlahServer}</code>
-<b>👥 Total User:</b> <code>${jumlahPengguna}</code>
-<b>╰──────────────────────╯`;
+<b>╰──────────────────────╯</b>
+<b>Jumlah Server:</b> <code>${jumlahServer}</code> <b>|️  User:</b> <code>${jumlahPengguna}</code>`;
 
   const keyboard = [];
 
