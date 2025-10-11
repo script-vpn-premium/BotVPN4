@@ -576,36 +576,35 @@ async function sendMainMenu(ctx) {
     statusText = `<b>» Role:</b> <code>Member 📌</code>`; // Mengubah emoji untuk Member
   }
 
-  // Pesan utama dengan format yang sudah padat dan rapi
-  const messageText = `
-<b>╭──────────────────────╮</b>
-<b>❇️ ≡   PGETUNNEL VPN STORE    ≡ ❇️</b>
+// Pesan utama versi dark premium + full bold
+const messageText = `
+<b>╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌</b>
+<b>🌀  PGETUNNEL VPN STORE  🌀</b>
+<b>╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌</b>
+<b>╭── 💳 INFORMASI AKUN ──╮</b>
+<b>┣ 💰 Saldo :</b> <code>Rp.${saldo.toLocaleString('id-ID')}</code>
+<b>┣ 👤 User :</b> ${userName}
+<b>┣ 🆔 ID :</b> <code>${userId}</code>
+<b>┣ ${statusText}
 <b>╰──────────────────────╯</b>
-<b>╭──────────────────────</b>
-<b>┣ 💰 Saldo Anda:</b> <code>Rp.${saldo.toLocaleString('id-ID')}</code>
-<b>┣──────────────────────</b>
-<b>┣ » User:</b> ${userName}
-<b>┣ » ID User:</b> <code>${userId}</code>
-<b>┣ </b>${statusText}
-<b>╰──────────────────────</b>
-<blockquote>✏️ <b>Statistik Anda:</b>
-<b>╭─────────────╮</b>
-» Hari Ini: ${userToday} akun
-» Minggu Ini: ${userWeek} akun
-» Bulan Ini: ${userMonth} akun
-
-🌐 <b>Statistik Global:</b>
-» Hari Ini: ${globalToday} akun
-» Minggu Ini: ${globalWeek} akun
-» Bulan Ini: ${globalMonth} akun
-<b>╰─────────────╯</b></blockquote>
-<b>╭──────────────────────╮</b>
-<b>┣ »️ Contact Admin:</b> <a href="https://t.me/${adminUsername}">@${adminUsername}</a>
+<b>╭── 📊 STATISTIK ANDA ──╮</b>
+<b>┣ 📅 Hari Ini :</b> ${userToday} akun
+<b>┣ 📆 Minggu Ini :</b> ${userWeek} akun
+<b>┣ 🗓️ Bulan Ini :</b> ${userMonth} akun
 <b>╰──────────────────────╯</b>
-<b>╭──────────────────────╮</b>
-<b>┣ » Jumlah Server:</b> <code>${jumlahServer}</code>
-<b>┣ »️ Jumlah User:</b> <code>${jumlahPengguna}</code>
-<b>╰──────────────────────╯</b>`;
+<b>╭── 🌍 STATISTIK GLOBAL ──╮</b>
+<b>┣ 📅 Hari Ini :</b> ${globalToday} akun
+<b>┣ 📆 Minggu Ini :</b> ${globalWeek} akun
+<b>┣ 🗓️ Bulan Ini :</b> ${globalMonth} akun
+<b>╰──────────────────────╯</b>
+<b>╭── ⚙️ SISTEM ──╮</b>
+<b>┣ 🖥️ Jumlah Server :</b> <code>${jumlahServer}</code>
+<b>┣ 👥 Jumlah User :</b> <code>${jumlahPengguna}</code>
+<b>╰──────────────────────╯</b>
+<b>╭── 📩 KONTAK ADMIN ──╮</b>
+<b>┣ 💬</b> <a href="https://t.me/${adminUsername}">@${adminUsername}</a>
+<b>╰──────────────────────╯</b>
+`;
 
   const keyboard = [];
 
