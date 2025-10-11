@@ -566,23 +566,18 @@ async function sendMainMenu(ctx) {
     logger.error('Gagal ambil data jumlah server:', e.message);
   }
 
-// Hitung jumlah reseller dari data yang ada
-const jumlahReseller = resellerList ? resellerList.length : 0; // pastikan resellerList sudah didefinisikan
-const jumlahPengguna = userList ? userList.length : 0; // total semua user
-const jumlahTopUp = userList ? userList.filter(u => u.totalTopUp > 0).length : 0; // total user yang pernah topup
+  // Menentukan teks status berdasarkan role
+  let statusText = '';
+  if (adminIds.includes(userId)) { // Cek jika user adalah admin
+    statusText = `<b>» Role:</b> <code>Admin 🌀</code>`;
+  } else if (userRole === 'reseller') {
+    statusText = `<b>» Role:</b> <code>Reseller 🔑</code>`;
+  } else {
+    statusText = `<b>» Role:</b> <code>Member 📌</code>`; // Mengubah emoji untuk Member
+  }
 
-// Menentukan teks status berdasarkan role
-let statusText = '';
-if (adminIds.includes(userId)) { // Cek jika user adalah admin
-  statusText = `<b>» Role:</b> <code>Admin 🌀</code>`;
-} else if (userRole === 'reseller') {
-  statusText = `<b>» Role:</b> <code>Reseller 🔑</code>`;
-} else {
-  statusText = `<b>» Role:</b> <code>Member 📌</code>`; // Mengubah emoji untuk Member
-}
-
-// Pesan utama dengan format yang sudah padat dan rapi
-const messageText = `
+  // Pesan utama dengan format yang sudah padat dan rapi
+  const messageText = `
 <b>╭──────────────────────╮</b>
 <b>❇️ ≡   PGETUNNEL VPN STORE    ≡ ❇️</b>
 <b>╰──────────────────────╯</b>
@@ -607,12 +602,7 @@ const messageText = `
 <b>╭──────────────────────╮</b>
 <b>❇️ Contact Admin:</b> <a href="https://t.me/${adminUsername}">@${adminUsername}</a>
 <b>╰──────────────────────╯</b>
-<b>╭──────────────────────╮</b>
-<b>┣ »Jumlah Server:</b> <code>${jumlahServer}</code> 
-<b>┣ »️ User:</b> <code>${jumlahPengguna}</code>
-<b>┣ » Reseller:</b> <code>${jumlahReseller}</code>
-<b>┣ » TopUp:</b> <code>${jumlahTopUp}</code>
-<b>╰──────────────────────╯</b>`;
+<b>Jumlah Server:</b> <code>${jumlahServer}</code> <b>|️  User:</b> <code>${jumlahPengguna}</code>`;
 
   const keyboard = [];
 
