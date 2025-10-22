@@ -601,7 +601,7 @@ async function sendMainMenu(ctx) {
 » Hari Ini: ${globalToday} akun  
 » Minggu Ini: ${globalWeek} akun  
 » Bulan Ini: ${globalMonth} akun  
-<b>╰────────────────────────╯</b></blockquote>
+<b>╰───────────────────────╯</b></blockquote>
 <b>╭──────────────────────────────╮</b>
 <b>┣          ❇️ SEWA SCRIPT AUTO-ORDER ❇️</b>
 <b>╰──────────────────────────────╯</b>
