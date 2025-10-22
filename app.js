@@ -615,7 +615,7 @@ async function sendMainMenu(ctx) {
 <b>┣ [03] Debian 12 : Ubuntu 24.04</b>  
 <b>╰──────────────────────────────╯</b>
 <b>╭──────────────────────────────╮</b>
-<b>📜 Catatan:</b>  
+<b>┣📜 Catatan:</b>  
 <b>┣ Sewa script dari kami bisa digunakan dengan</b>  
 <b>┣ bot auto order Mendukung bot pribadi</b>   
 <b>┣ Cocok untuk usaha jualan akun tanpa</b>  
