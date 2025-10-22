@@ -578,46 +578,79 @@ async function sendMainMenu(ctx) {
 
   // Pesan utama dengan format yang sudah padat dan rapi
   const messageText = `
-<b>╭──────────────────────╮</b>
-<b>❇️ ≡   PGETUNNEL VPN STORE    ≡ ❇️</b>
-<b>╰──────────────────────╯</b>
-<b>╭──────────────────────</b>
-<b>┣ 💰 Saldo Anda:</b> <code>Rp.${saldo.toLocaleString('id-ID')}</code>
-<b>┣──────────────────────</b>
-<b>┣ » User:</b> ${userName}
-<b>┣ » ID User:</b> <code>${userId}</code>
-<b>┣ </b>${statusText}
-<b>╰──────────────────────</b>
-<blockquote>✏️ <b>Statistik Anda:</b>
-<b>╭─────────────╮</b>
-» Hari Ini: ${userToday} akun
-» Minggu Ini: ${userWeek} akun
-» Bulan Ini: ${userMonth} akun
+<b>╭──────────────────────────────╮</b>
+<b>     ❇️ ≡  PGETUNNEL VPN STORE  ≡ ❇️</b>
+<b>╰──────────────────────────────╯</b>
 
-🌐 <b>Statistik Global:</b>
-» Hari Ini: ${globalToday} akun
-» Minggu Ini: ${globalWeek} akun
-» Bulan Ini: ${globalMonth} akun
-<b>╰─────────────╯</b></blockquote>
-<b>╭──────────────────────╮</b>
+<b>╭──────────────────────────────╮</b>
+<b>┣ 💰 Saldo Anda:</b> <code>Rp.${saldo.toLocaleString('id-ID')}</code>
+<b>┣ 👤 User:</b> ${userName}
+<b>┣ 🆔 ID User:</b> <code>${userId}</code>
+<b>┣ 🔖 Status:</b> ${statusText}
+<b>╰──────────────────────────────╯</b>
+<blockquote>
+<b>╭──────────────────────────────╮</b>
+✏️ <b>Statistik Anda</b>
+<b>┣──────────────────────────────</b>
+» Hari Ini: ${userToday} akun  
+» Minggu Ini: ${userWeek} akun  
+» Bulan Ini: ${userMonth} akun  
+
+🌐 <b>Statistik Global</b>  
+<b>┣──────────────────────────────</b>
+» Hari Ini: ${globalToday} akun  
+» Minggu Ini: ${globalWeek} akun  
+» Bulan Ini: ${globalMonth} akun  
+<b>╰──────────────────────────────╯</b>
+</blockquote>
+<b>╭──────────────────────────────╮</b>
 <b>❇️ Contact Admin:</b> <a href="https://t.me/${adminUsername}">@${adminUsername}</a>
-<b>╰──────────────────────╯</b>
-<b>Jumlah Server:</b> <code>${jumlahServer}</code> <b>|️  User:</b> <code>${jumlahPengguna}</code>`;
+<b>╰──────────────────────────────╯</b>
+<b>╭──────────────────────────────╮</b>
+<b>┣ 📊 Jumlah Server:</b> <code>${jumlahServer}</code>  
+<b>┣ 👥 Jumlah User:</b> <code>${jumlahPengguna}</code>  
+<b>╰──────────────────────────────╯</b>
+<b>╭──────────────────────────────╮</b>
+<b>❇️ SEWA SCRIPT AUTO-ORDER ❇️</b>
+<b>╰──────────────────────────────╯</b>
+<b>╭──────────────────────────────╮</b>
+<b>💵 Harga:</b> <code>Rp 15.000 / bulan</code>
+<b>💽 OS Tersedia:</b>
+<b>╰──────────────────────────────╯</b>
+<b>╭──────────── Debian ────────────╮</b>
+[01] Debian 10  
+[02] Debian 11  
+[03] Debian 12  
+<b>╰──────────────────────────────╯</b>
+<b>╭──────────── Ubuntu ────────────╮</b>
+[01] Ubuntu 20.04  
+[02] Ubuntu 22.04  
+[03] Ubuntu 24.04  
+[04] Ubuntu 24.10  
+<b>╰──────────────────────────────╯</b>
+<b>╭──────────────────────────────╮</b>
+<b>📜 Catatan:</b>  
+• Sewa script dari kami bisa digunakan dengan
+• bot auto order Mendukung bot pribadi atau publik.  
+• Cocok untuk usaha jualan akun tanpa
+• perlu menunggu admin online.  
+
+<b>🔗 Info & Pemesanan:</b> <a href="https://t.me/${adminUsername}">@${adminUsername}</a>
+<b>╰──────────────────────────────╯</b>`;
 
   const keyboard = [];
 
   if (bolehLihatTrial) {
-    keyboard.push([{ text: '🌟 Trial Akun', callback_data: 'service_trial' }]);
-  }
+  keyboard.push([{ text: '🌟 Trial', callback_data: 'service_trial' }]);
+}
 
-  keyboard.push([{ text: '♀️ Membuat Akun', callback_data: 'service_create' }]);
-  keyboard.push([{ text: '♻️ Perpanjangan Akun', callback_data: 'service_renew' }]);
-  
-  if (tombolSewaScriptAktif) {
-    keyboard.push([{ text: '🛒 Sewa Script', callback_data: 'service_sewascript' }]);
-  }
-  
-  keyboard.push([{ text: '💰 Top Up', callback_data: 'menu_topup' }]);
+// 1 baris 2 tombol
+keyboard.push([
+  { text: '♀️ Create', callback_data: 'service_create' },
+  { text: '♻️ Renew', callback_data: 'service_renew' }
+]);
+
+keyboard.push([{ text: '💰 Top Up', callback_data: 'menu_topup' }]);
 
 
   try {
@@ -1401,45 +1434,67 @@ async function handleServiceAction(ctx, action) {
     let keyboard = [];
 
     if (action === 'trial') {
-        if (sshServerAvailable) {
-            keyboard.push([{ text: '🌟 Trial Akun SSH', callback_data: 'trial_ssh' }]);
-        }
-        keyboard.push(
-            [{ text: '🌟 Trial Akun Vmess', callback_data: 'trial_vmess' }],
-            [{ text: '🌟 Trial Akun Vless', callback_data: 'trial_vless' }],
-            [{ text: '🌟 Trial Akun Trojan', callback_data: 'trial_trojan' }],
-            [{ text: '🌟 Trial Akun Shadowsocks', callback_data: 'trial_shadowsocks' }],
-            [{ text: '🔙 Kembali', callback_data: 'send_main_menu' }]
-        );
-    } else if (action === 'create') {
-        if (sshServerAvailable) {
-            keyboard.push([{ text: '♀️Buat Akun SSH', callback_data: 'create_ssh' }]);
-        }
-        keyboard.push(
-            [{ text: '♀️Buat Akun Vmess', callback_data: 'create_vmess' }], 
-            [{ text: '♀️Buat Akun Vless', callback_data: 'create_vless' }],
-            [{ text: '♀️Buat Akun Trojan', callback_data: 'create_trojan' }], 
-            [{ text: '♀️Buat Akun Shadowsocks', callback_data: 'create_shadowsocks' }],
-            [{ text: '🔙 Kembali', callback_data: 'send_main_menu' }]
-        );
-    } else if (action === 'renew') {
-        if (sshServerAvailable) {
-            keyboard.push([{ text: '♻️ Perpanjang Akun SSH', callback_data: 'renew_ssh' }]);
-        }
-        keyboard.push(
-            [{ text: '♻️ Perpanjang Akun Vmess', callback_data: 'renew_vmess' }],
-            [{ text: '♻️ Perpanjang Akun Vless', callback_data: 'renew_vless' }],
-            [{ text: '♻️ Perpanjang Akun Trojan', callback_data: 'renew_trojan' }],
-            [{ text: '♻️ Perpanjang Akun Shadowsocks', callback_data: 'renew_shadowsocks' }],
-            [{ text: '🔙 Kembali', callback_data: 'send_main_menu' }]
-        );
-    } else if (action === 'sewascript') {
-        keyboard = [
-            [{ text: '🥇 Registrasi IP', callback_data: 'sewascript_daftar' }],
-            [{ text: '🥈 Perpanjangan IP', callback_data: 'sewascript_perpanjang' }],
-            [{ text: '🔙 Kembali', callback_data: 'send_main_menu' }]
-        ];
+    if (sshServerAvailable) {
+        keyboard.push([
+            { text: '🌟 SSH', callback_data: 'trial_ssh' },
+            { text: '🌟 Vmess', callback_data: 'trial_vmess' }
+        ]);
+    } else {
+        keyboard.push([
+            { text: '🌟 Vmess', callback_data: 'trial_vmess' },
+            { text: '🌟 Vless', callback_data: 'trial_vless' }
+        ]);
     }
+
+    keyboard.push([
+        { text: '🌟 Trojan', callback_data: 'trial_trojan' },
+        { text: '🌟 Shadowsocks', callback_data: 'trial_shadowsocks' }
+    ]);
+
+    keyboard.push([{ text: '🔙 Kembali', callback_data: 'send_main_menu' }]);
+}
+
+else if (action === 'create') {
+    if (sshServerAvailable) {
+        keyboard.push([
+            { text: '♀️ SSH', callback_data: 'create_ssh' },
+            { text: '♀️ Vmess', callback_data: 'create_vmess' }
+        ]);
+    } else {
+        keyboard.push([
+            { text: '♀️ Vmess', callback_data: 'create_vmess' },
+            { text: '♀️ Vless', callback_data: 'create_vless' }
+        ]);
+    }
+
+    keyboard.push([
+        { text: '♀️ Trojan', callback_data: 'create_trojan' },
+        { text: '♀️ Shadowsocks', callback_data: 'create_shadowsocks' }
+    ]);
+
+    keyboard.push([{ text: '🔙 Kembali', callback_data: 'send_main_menu' }]);
+}
+
+else if (action === 'renew') {
+    if (sshServerAvailable) {
+        keyboard.push([
+            { text: '♻️  SSH', callback_data: 'renew_ssh' },
+            { text: '♻️ Vmess', callback_data: 'renew_vmess' }
+        ]);
+    } else {
+        keyboard.push([
+            { text: '♻️ Vmess', callback_data: 'renew_vmess' },
+            { text: '♻️ Vless', callback_data: 'renew_vless' }
+        ]);
+    }
+
+    keyboard.push([
+        { text: '♻️ Trojan', callback_data: 'renew_trojan' },
+        { text: '♻️ Shadowsocks', callback_data: 'renew_shadowsocks' }
+    ]);
+
+    keyboard.push([{ text: '🔙 Kembali', callback_data: 'send_main_menu' }]);
+}
 
     try {
         await ctx.editMessageReplyMarkup({
